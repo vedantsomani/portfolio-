@@ -1,0 +1,31 @@
+---
+failureId: "FAIL-003"
+title: "Optical Flow BAD OPTFLOW HEALTH"
+order: 1
+status: "Open test plan"
+severity: "medium"
+system: "Pixhawk drone sensor integration"
+detectedAt: "2026-06-09T19:58:00+05:30"
+summary: "Optical-flow health degraded during controlled testing, blocking reliable GPS-denied state estimation."
+symptom: "Mission Planner reported BAD OPTFLOW HEALTH and the replay showed unstable flow quality values."
+rootCause: "Suspected combination of sensor placement geometry, surface texture, and parameter mismatch."
+fix: "Recorded placement assumptions, captured telemetry screenshots, and narrowed the next test to one variable at a time."
+lesson: "Sensor health warnings are evidence. Capture them, constrain the variables, and retest instead of re-flying blind."
+relatedProofIds: ["drone-flightlog-23", "drone-mp-01"]
+tags: ["optical-flow", "pixhawk", "debugging"]
+seo:
+  title: "FAIL-003 Optical Flow BAD OPTFLOW HEALTH"
+  description: "Failure analysis and retest plan for optical-flow health degradation in a Pixhawk drone mission."
+---
+
+## What broke
+
+The sensor state was not trustworthy enough to continue the autonomy test. That made the correct decision an abort and evidence capture, not another uncontrolled run.
+
+## Why it broke
+
+Current evidence points to configuration and placement variables rather than a confirmed single hardware fault. The next run needs constrained changes so the result is meaningful.
+
+## What changed
+
+The incident now links directly to proof artifacts and carries a narrower retest plan: placement first, then surface texture, then calibration, then parameters; one variable per run.

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Proof archive visual</title>
+  <desc id="desc">Evidence archive grid with logs, screenshots, diagrams, code, photos, and CAD artifacts.</desc>
+  <rect width="1200" height="800" fill="#070a0f"/>
+  <rect x="70" y="70" width="1060" height="660" rx="12" fill="#0e1116" stroke="#243041" stroke-width="2"/>
+  <text x="130" y="150" fill="#60a5fa" font-family="ui-monospace, monospace" font-size="32" font-weight="700">PROOF ARCHIVE</text>
+  <g transform="translate(130 215)" font-family="ui-monospace, monospace">
+    <g fill="#111821" stroke="#2c3b50" stroke-width="2">
+      <rect width="280" height="170" rx="8"/>
+      <rect x="320" width="280" height="170" rx="8"/>
+      <rect x="640" width="280" height="170" rx="8"/>
+      <rect y="210" width="280" height="170" rx="8"/>
+      <rect x="320" y="210" width="280" height="170" rx="8"/>
+      <rect x="640" y="210" width="280" height="170" rx="8"/>
+    </g>
+    <g fill="#f5f7fa" font-size="20" font-weight="700">
+      <text x="28" y="46">LOGS</text>
+      <text x="348" y="46">SCREENSHOTS</text>
+      <text x="668" y="46">DIAGRAMS</text>
+      <text x="28" y="256">CODE</text>
+      <text x="348" y="256">BENCH PHOTOS</text>
+      <text x="668" y="256">CAD</text>
+    </g>
+    <g stroke-linecap="round" stroke-width="8">
+      <path d="M30 95h160M30 125h210" stroke="#f5a623"/>
+      <path d="M350 95h190M350 125h110" stroke="#60a5fa"/>
+      <path d="M670 95h170M670 125h210" stroke="#22d3ee"/>
+      <path d="M30 305h205M30 335h120" stroke="#8b5cf6"/>
+      <path d="M350 305h160M350 335h210" stroke="#22c55e"/>
+      <path d="M670 305h205M670 335h95" stroke="#f97316"/>
+    </g>
+  </g>
+</svg>

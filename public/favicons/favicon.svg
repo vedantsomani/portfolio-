@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="VEDANT LAB mark">
+  <rect width="64" height="64" rx="10" fill="#05070a"/>
+  <path d="M14 17h36L38 48H26L14 17Z" fill="#141922" stroke="#60a5fa" stroke-width="3"/>
+  <path d="M23 25h18M26 32h12M29 39h6" stroke="#22d3ee" stroke-width="3" stroke-linecap="round"/>
+</svg>

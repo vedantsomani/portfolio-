@@ -1,0 +1,108 @@
+<footer class="site-footer">
+  <div class="container-wide footer-grid">
+    <div class="footer-id">
+      <p class="micro-label">VEDANT LAB</p>
+      <p>Vedant Somani — robotics, embedded systems, secure communication, fabrication, and failure analysis.</p>
+    </div>
+    <nav aria-label="Footer navigation">
+      <a href="/#work">Work</a>
+      <a href="/#failures">Failures</a>
+      <a href="/#proof">Proof</a>
+      <a href="/resume">Resume</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+  <div class="container-wide footer-meta">
+    <small>© 2026 Vedant Somani · Public engineering log</small>
+    <a href="mailto:vedantsomani12@gmail.com">vedantsomani12@gmail.com</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--hairline);
+    padding-block: 2.25rem 1.75rem;
+    background: rgba(5, 6, 8, 0.7);
+  }
+
+  .footer-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .footer-id .micro-label {
+    color: var(--color-text-strong);
+  }
+
+  .footer-id p:not(.micro-label) {
+    max-width: 52ch;
+    margin-top: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-end;
+    gap: 0.4rem;
+  }
+
+  nav a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.45rem;
+    color: var(--color-text-muted);
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  nav a:hover,
+  nav a:focus-visible {
+    color: var(--color-text-strong);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
+    padding-top: 1.25rem;
+  }
+
+  .footer-meta small {
+    color: var(--color-text-soft);
+    font-size: 0.8rem;
+  }
+
+  .footer-meta a {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .footer-meta a:hover,
+  .footer-meta a:focus-visible {
+    color: var(--color-text-strong);
+  }
+
+  @media (max-width: 720px) {
+    .footer-grid,
+    .footer-meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    nav {
+      justify-content: flex-start;
+    }
+  }
+</style>

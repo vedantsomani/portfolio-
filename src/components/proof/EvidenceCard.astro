@@ -1,0 +1,108 @@
+---
+import { accentColors, type ProofArtifact } from "@lib/proof";
+
+interface Props {
+  artifact: ProofArtifact;
+  compact?: boolean;
+}
+
+const { artifact, compact = false } = Astro.props;
+const accent = accentColors[artifact.accent];
+---
+
+<article class:list={["evidence-card", { compact }]} style={`--accent: ${accent}`}>
+  <a href={artifact.href}>
+    <div class="media-frame evidence-media">
+      <img src={artifact.media} alt={artifact.mediaAlt} width="1200" height="800" loading="lazy" decoding="async" />
+    </div>
+    <div class="evidence-body">
+      <div class="evidence-meta">
+        <span class="chip" style={`--accent: ${accent}`}>{artifact.type}</span>
+        <span>{artifact.status}</span>
+      </div>
+      <h3>{artifact.title}</h3>
+      <p>{artifact.summary}</p>
+      <div class="tag-row">
+        {artifact.tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .evidence-card {
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    overflow: hidden;
+    transition:
+      border-color 0.16s ease,
+      transform 0.16s ease,
+      background 0.16s ease;
+  }
+
+  .evidence-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 56%, var(--color-border));
+    background: var(--color-bg-2);
+    transform: translateY(-3px);
+  }
+
+  .evidence-card a {
+    display: grid;
+    min-height: 100%;
+  }
+
+  .evidence-media {
+    aspect-ratio: 16 / 10;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .evidence-body {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .evidence-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+  }
+
+  h3 {
+    color: var(--color-text-strong);
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  p {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .tag-row span {
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+  }
+
+  .tag-row span::before {
+    content: "#";
+    color: var(--accent);
+  }
+
+  .compact .evidence-media {
+    display: none;
+  }
+</style>

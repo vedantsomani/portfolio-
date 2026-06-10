@@ -1,0 +1,29 @@
+---
+interface Props {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  accent?: string;
+}
+
+const { id, eyebrow, title, subtitle, accent = "var(--accent)" } = Astro.props;
+---
+
+<section id={id} class="section-band" style={`--accent: ${accent}`}>
+  <div class="container-wide section-shell">
+    <div class="section-heading">
+      <p class="micro-label" style={`color: ${accent}`}>{eyebrow}</p>
+      <h2>{title}</h2>
+      {subtitle && <p>{subtitle}</p>}
+    </div>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section-shell {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+</style>

@@ -1,0 +1,551 @@
+---
+import AboutContact from "@components/home/AboutContact.astro";
+import DroneReplay from "@components/home/DroneReplay.tsx";
+import FeaturedSystems from "@components/home/FeaturedSystems.astro";
+import NodePanel from "@components/home/NodePanel.tsx";
+import ProofArchive from "@components/home/ProofArchive.astro";
+import ProofStrip from "@components/home/ProofStrip.astro";
+import ProtocolGraph from "@components/home/ProtocolGraph.tsx";
+import FailureExplorer, { type FailureTicket } from "@components/failures/FailureExplorer.tsx";
+import SystemShell from "@components/shell/SystemShell.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import { getProofByIds } from "@lib/proof";
+import { cachedStatus } from "@lib/status";
+
+const failures = (await getCollection("failures")).sort((a, b) => a.data.order - b.data.order);
+const failureTickets: FailureTicket[] = failures.map((failure) => ({
+  slug: failure.id,
+  failureId: failure.data.failureId,
+  title: failure.data.title,
+  system: failure.data.system,
+  severity: failure.data.severity,
+  status: failure.data.status,
+  detectedAt: failure.data.detectedAt,
+  summary: failure.data.summary,
+  symptom: failure.data.symptom,
+  cause: failure.data.rootCause,
+  fix: failure.data.fix,
+  lesson: failure.data.lesson,
+  tags: failure.data.tags,
+  href: `/failures/${failure.id}`,
+  evidence: getProofByIds(failure.data.relatedProofIds).map((artifact) => ({
+    label: artifact.title,
+    href: artifact.href,
+  })),
+}));
+---
+
+<MainLayout
+  accent="#60a5fa"
+  meta={{
+    title: "VEDANT LAB - Vedant Somani",
+    description:
+      "Engineering portfolio of Vedant Somani: drones, ESP32 telemetry, Rust security prototypes, 3D printed hardware, and the failures behind them.",
+    image: "/visuals/proof-archive.svg",
+  }}
+>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-content">
+      <p class="micro-label hero-kicker">Engineering Log · Est. 2026</p>
+      <h1>VEDANT LAB</h1>
+      <p class="hero-tagline">Robotics. Embedded Systems. Secure Communication.</p>
+      <p class="hero-sub">
+        I build and document real systems: drones, ESP32 telemetry, Rust security prototypes,
+        3D printed hardware, and the failures behind them.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#work">View Work</a>
+        <a class="button" href="#proof">View Proof</a>
+        <a class="button" href="/resume">Download Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF STRIP -->
+  <ProofStrip />
+
+  <!-- FEATURED SYSTEMS -->
+  <FeaturedSystems />
+
+  <!-- 01 DRONE -->
+  <SystemShell
+    id="drone"
+    number="01"
+    title="MISSION REPLAY / DRONE SYSTEMS"
+    subtitle="Pixhawk-based F450 platform for GPS-denied autonomy and sensor-integration experiments."
+    status="Active Testing"
+    accent="#f59e0b"
+  >
+    <DroneReplay client:visible />
+    <div class="system-actions">
+      <a class="button button-primary" href="/projects/drone-mission-replay#evidence" style="--accent: #f59e0b">View Logs</a>
+      <a class="button" href="/projects/drone-mission-replay#stack" style="--accent: #f59e0b">Sensor Stack</a>
+      <a class="button" href="/failures/fail-003-optical-flow-health" style="--accent: #f59e0b">Failure Report</a>
+    </div>
+  </SystemShell>
+
+  <!-- 02 VAJRA -->
+  <SystemShell
+    id="vajra"
+    number="02"
+    title="VAJRA SECURE LINK"
+    subtitle="Rust-based post-quantum secure communication prototype under verification."
+    status="Prototype / Under Verification"
+    accent="#8b5cf6"
+    secondary="#38bdf8"
+  >
+    <div class="vajra-grid">
+      <div class="vajra-terminal" role="img" aria-label="Terminal readout of the VAJRA handshake inspection showing prototype status and pending verification items.">
+        <div class="vajra-terminal-bar">
+          <span></span><span></span><span></span>
+          <small>vajra — inspect</small>
+        </div>
+        <pre><code><span class="t-prompt">vajra@lab:~$</span> inspect handshake
+
+<span class="t-key">Protocol:</span> VAJRA Mesh Handshake
+<span class="t-key">Language:</span> Rust
+<span class="t-key">Goal:</span>     post-quantum secure communication prototype
+
+<span class="t-key">Status:</span>
+<span class="t-ok">[✓]</span> implementation started
+<span class="t-ok">[✓]</span> audit roadmap exists
+<span class="t-warn">[!]</span> formal verification incomplete
+<span class="t-warn">[!]</span> external review missing</code></pre>
+      </div>
+      <ProtocolGraph client:visible />
+    </div>
+    <div class="system-actions">
+      <a class="button button-primary" href="/projects/vajra-secure-link" style="--accent: #8b5cf6">Threat Model</a>
+      <a class="button" href="/projects/vajra-secure-link#timeline" style="--accent: #8b5cf6">Handshake Flow</a>
+      <a class="button" href="/failures/fail-007-vajra-audit-gap" style="--accent: #8b5cf6">Audit Gaps</a>
+      <a class="button" href="/projects/vajra-secure-link#evidence" style="--accent: #8b5cf6">Code</a>
+    </div>
+  </SystemShell>
+
+  <!-- 03 ESP32 -->
+  <SystemShell
+    id="esp32"
+    number="03"
+    title="ESP32 LIVE NODE"
+    subtitle="Embedded telemetry node exposing live/cached sensor readings through an API — freshness always labeled, never faked."
+    status="Live / Cached"
+    accent="#22c55e"
+  >
+    <div class="esp32-grid">
+      <NodePanel initialStatus={cachedStatus} client:visible />
+      <div class="esp32-side">
+        <div class="esp32-wiring">
+          <img src="/visuals/esp32-node.svg" alt="ESP32 wiring diagram placeholder — replace with the real bench photo." width="600" height="400" loading="lazy" decoding="async" />
+          <span class="esp32-wiring-tag">wiring photo slot</span>
+        </div>
+        <p>
+          The node publishes temperature, humidity, voltage, and signal strength. When the hardware
+          feed is offline, the panel shows the cached payload and says so.
+        </p>
+        <div class="system-actions">
+          <a class="button button-primary" href="/status" style="--accent: #22c55e">Open Node</a>
+          <a class="button" href="/projects/esp32-live-node" style="--accent: #22c55e">Firmware & API</a>
+        </div>
+      </div>
+    </div>
+  </SystemShell>
+
+  <!-- 04 FABRICATION -->
+  <SystemShell
+    id="fabrication"
+    number="04"
+    title="FABRICATION BENCH"
+    subtitle="3D printed robotics parts, aircraft parts, material experiments, failed prints, and mechanical iterations."
+    status="Iterating"
+    accent="#f97316"
+  >
+    <div class="fab-grid">
+      <div class="fab-gallery">
+        {[
+          { label: "Finished Prints", note: "dimensional + surface checks" },
+          { label: "Failed Prints", note: "kept as evidence" },
+          { label: "CAD Screenshots", note: "design intent" },
+          { label: "Material Experiments", note: "PLA · PLA+ · LW-PLA" },
+          { label: "Repair Notes", note: "what got fixed and why" },
+        ].map((card) => (
+          <a class="fab-card" href="/projects/fabrication-bench#evidence">
+            <span class="fab-card-media">
+              <img src="/visuals/fabrication-bench.svg" alt={`${card.label} photo slot.`} width="600" height="400" loading="lazy" decoding="async" />
+            </span>
+            <strong>{card.label}</strong>
+            <small>{card.note}</small>
+          </a>
+        ))}
+      </div>
+      <div class="fab-panel">
+        <p class="fab-panel-title">Print settings</p>
+        <svg class="fab-layers" viewBox="0 0 280 96" aria-hidden="true">
+          {[84, 73, 62, 51, 40, 29, 18].map((y, i) => (
+            <line x1={36 + i * 12} y1={y} x2={244 - i * 12} y2={y} stroke="#f97316" stroke-width="3.5" opacity={0.2 + i * 0.1} />
+          ))}
+          <line x1="20" y1="92" x2="260" y2="92" stroke="#f97316" stroke-width="1.4" opacity="0.5" />
+        </svg>
+        <dl class="fab-settings">
+          <div><dt>Printer</dt><dd>Bambu A1</dd></div>
+          <div><dt>Nozzle</dt><dd>0.4 mm</dd></div>
+          <div><dt>Layer height</dt><dd>0.2 mm</dd></div>
+          <div><dt>Materials</dt><dd>PLA · PLA+ · LW-PLA</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="fab-chips">
+      {["Bambu A1", "PLA", "PLA+", "LW-PLA", "CAD", "Failed Prints", "Aircraft Parts", "Robotics Parts"].map((chip) => (
+        <span class="chip" style="--accent: #f97316">{chip}</span>
+      ))}
+    </div>
+    <div class="system-actions">
+      <a class="button button-primary" href="/projects/fabrication-bench" style="--accent: #f97316">View Bench</a>
+    </div>
+  </SystemShell>
+
+  <!-- 05 FAILURE LOG -->
+  <SystemShell
+    id="failures"
+    number="05"
+    title="FAILURE LOG"
+    subtitle="What broke. Why it broke. What changed."
+    status="Public Debug Log"
+    accent="#facc15"
+  >
+    <FailureExplorer failures={failureTickets} client:visible />
+    <div class="system-actions">
+      <a class="button button-primary" href="/failures" style="--accent: #facc15">Read All Failures</a>
+    </div>
+  </SystemShell>
+
+  <!-- PROOF ARCHIVE -->
+  <ProofArchive />
+
+  <!-- ABOUT / CONTACT -->
+  <AboutContact />
+</MainLayout>
+
+<style>
+  /* HERO */
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(96, 165, 250, 0.07), transparent 70%),
+      radial-gradient(ellipse 110% 80% at 50% 115%, rgba(5, 6, 8, 0.92), transparent);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.2rem;
+    padding-block: clamp(6rem, 14vw, 11rem) clamp(5rem, 11vw, 9rem);
+  }
+
+  .hero-kicker {
+    color: var(--color-proof);
+  }
+
+  .hero-content h1 {
+    font-size: clamp(3.4rem, 10vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-tagline {
+    color: var(--color-text-strong);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-sub {
+    max-width: 58ch;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  /* SHARED SYSTEM ACTIONS */
+  .system-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  /* VAJRA */
+  .vajra-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+
+  .vajra-terminal {
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, #8b5cf6 28%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: #0a0c11;
+    box-shadow: var(--shadow-card);
+  }
+
+  .vajra-terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-bottom: 1px solid var(--hairline);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.6rem 0.9rem;
+  }
+
+  .vajra-terminal-bar span {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+  }
+
+  .vajra-terminal-bar small {
+    margin-left: 0.5rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .vajra-terminal pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: 1.1rem 1.2rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    line-height: 1.75;
+  }
+
+  .t-prompt { color: #38bdf8; font-weight: 600; }
+  .t-key { color: var(--color-text-strong); font-weight: 600; }
+  .t-ok { color: #22c55e; font-weight: 600; }
+  .t-warn { color: #facc15; font-weight: 600; }
+
+  /* ESP32 */
+  .esp32-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .esp32-side {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .esp32-wiring {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 1px solid color-mix(in srgb, #22c55e 26%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+  }
+
+  .esp32-wiring img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .esp32-wiring-tag {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
+    background: rgba(5, 6, 8, 0.85);
+    color: var(--color-text-soft);
+    padding: 0.22rem 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .esp32-side > p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    max-width: 52ch;
+  }
+
+  /* FABRICATION */
+  .fab-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .fab-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .fab-card {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, #f97316 22%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    padding: 0.7rem;
+    transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .fab-card:hover,
+  .fab-card:focus-visible {
+    border-color: color-mix(in srgb, #f97316 55%, var(--color-border));
+    box-shadow: 0 0 22px rgba(249, 115, 22, 0.12);
+    transform: translateY(-3px);
+  }
+
+  .fab-card-media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: 0.35rem;
+    background: var(--color-bg-2);
+  }
+
+  .fab-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fab-card strong {
+    color: var(--color-text-strong);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .fab-card small {
+    color: var(--color-text-soft);
+    font-size: 0.76rem;
+  }
+
+  .fab-panel {
+    display: grid;
+    gap: 0.9rem;
+    border: 1px solid color-mix(in srgb, #f97316 26%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    padding: 1.1rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .fab-panel-title {
+    color: #f97316;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .fab-layers {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    border-radius: 0.4rem;
+    background: rgba(5, 6, 8, 0.5);
+  }
+
+  .fab-settings {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 0.4rem;
+    overflow: hidden;
+  }
+
+  .fab-settings div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .fab-settings div + div {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .fab-settings dt {
+    color: var(--color-text-soft);
+    font-size: 0.8rem;
+  }
+
+  .fab-settings dd {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .fab-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 980px) {
+    .vajra-grid,
+    .esp32-grid,
+    .fab-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .fab-gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero-actions,
+    .system-actions {
+      width: 100%;
+    }
+
+    .hero-actions :global(.button),
+    .system-actions :global(.button) {
+      width: 100%;
+    }
+  }
+</style>

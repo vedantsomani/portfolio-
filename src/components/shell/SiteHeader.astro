@@ -1,0 +1,228 @@
+---
+const navItems = [
+  { href: "/#work", label: "Work" },
+  { href: "/#failures", label: "Failures" },
+  { href: "/#proof", label: "Proof" },
+  { href: "/resume", label: "Resume" },
+  { href: "/#contact", label: "Contact" },
+];
+---
+
+<header class="site-header">
+  <div class="container-wide header-inner">
+    <a class="brand" href="/" aria-label="Vedant Somani — VEDANT LAB home">
+      <span class="brand-mark" aria-hidden="true">VL</span>
+      <span class="brand-text">
+        <strong>Vedant Somani</strong>
+        <small>VEDANT LAB</small>
+      </span>
+    </a>
+
+    <nav class="header-nav" aria-label="Primary navigation">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+      <span class="menu-bar" aria-hidden="true"></span>
+      <span class="menu-bar" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden>
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector(".site-header");
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const mobileNav = header?.querySelector<HTMLElement>("#mobile-nav");
+
+  if (toggle && mobileNav) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      mobileNav.hidden = !open;
+    };
+
+    toggle.addEventListener("click", () => {
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    // Close after navigating via a menu link (anchor scroll keeps the page).
+    mobileNav.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("a")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--hairline);
+    background: rgba(5, 6, 8, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .header-inner {
+    min-height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-bg-1);
+    color: var(--color-text-strong);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .brand-text strong,
+  .brand-text small {
+    display: block;
+  }
+
+  .brand-text strong {
+    font-family: var(--font-display);
+    font-size: 0.96rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .brand-text small {
+    margin-top: 0.15rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .header-nav a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.45rem;
+    color: var(--color-text-muted);
+    padding: 0.5rem 0.8rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: color 0.16s ease, background 0.16s ease;
+  }
+
+  .header-nav a:hover,
+  .header-nav a:focus-visible {
+    color: var(--color-text-strong);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-bg-1);
+    cursor: pointer;
+    transition: border-color 0.16s ease;
+  }
+
+  .menu-toggle:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .menu-bar {
+    width: 1.1rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-text-strong);
+    transition: transform 0.2s ease;
+  }
+
+  .menu-toggle[aria-expanded="true"] .menu-bar:first-child {
+    transform: translateY(0.21rem) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] .menu-bar:last-child {
+    transform: translateY(-0.21rem) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .header-nav {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+
+    .mobile-nav {
+      display: grid;
+      gap: 0.25rem;
+      border-top: 1px solid var(--hairline);
+      padding: 0.75rem 1.25rem 1rem;
+    }
+
+    .mobile-nav[hidden] {
+      display: none;
+    }
+
+    .mobile-nav a {
+      min-height: 2.75rem;
+      display: flex;
+      align-items: center;
+      border-radius: 0.45rem;
+      color: var(--color-text-muted);
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .mobile-nav a:hover,
+    .mobile-nav a:focus-visible {
+      color: var(--color-text-strong);
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+</style>

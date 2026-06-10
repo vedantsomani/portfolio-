@@ -1,0 +1,45 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  priority?: boolean;
+}
+
+const { src, alt, caption, priority = false } = Astro.props;
+---
+
+<figure class="media-frame media-frame-component">
+  <img
+    src={src}
+    alt={alt}
+    width="1200"
+    height="800"
+    loading={priority ? "eager" : "lazy"}
+    decoding={priority ? "sync" : "async"}
+    fetchpriority={priority ? "high" : "auto"}
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .media-frame-component {
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    position: relative;
+  }
+
+  figcaption {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    max-width: calc(100% - 2rem);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.375rem;
+    background: rgba(5, 6, 8, 0.8);
+    color: var(--color-text-strong);
+    padding: 0.55rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+</style>

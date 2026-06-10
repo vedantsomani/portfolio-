@@ -1,0 +1,41 @@
+---
+import EvidenceCard from "@components/proof/EvidenceCard.astro";
+import type { ProofArtifact } from "@lib/proof";
+
+interface Props {
+  artifacts: ProofArtifact[];
+  compact?: boolean;
+}
+
+const { artifacts, compact = false } = Astro.props;
+---
+
+<div class:list={["evidence-grid", { compact }]}>
+  {artifacts.map((artifact) => <EvidenceCard artifact={artifact} compact={compact} />)}
+</div>
+
+<style>
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .evidence-grid.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 920px) {
+    .evidence-grid,
+    .evidence-grid.compact {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .evidence-grid,
+    .evidence-grid.compact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

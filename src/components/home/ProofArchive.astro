@@ -1,0 +1,169 @@
+---
+import { ArrowUpRight, Box, Camera, Code, Download, FileText, Share2, Terminal } from "lucide-react";
+
+const categories = [
+  {
+    icon: Code,
+    name: "Code",
+    description: "GitHub repositories and implementation notes.",
+    href: "/projects/vajra-secure-link#evidence",
+    action: "Browse code",
+  },
+  {
+    icon: FileText,
+    name: "Logs",
+    description: "Build logs, test outputs, flight and debug logs.",
+    href: "/projects/drone-mission-replay#evidence",
+    action: "Open logs",
+  },
+  {
+    icon: Camera,
+    name: "Photos",
+    description: "Drone wiring, ESP32 setup, 3D prints, failed prints.",
+    href: "/proof",
+    action: "View photos",
+  },
+  {
+    icon: Box,
+    name: "CAD",
+    description: "STL files, CAD screenshots, mechanical layouts.",
+    href: "/projects/fabrication-bench#evidence",
+    action: "Open CAD",
+  },
+  {
+    icon: Terminal,
+    name: "Test Output",
+    description: "Protocol tests, sensor checks, verification runs.",
+    href: "/proof",
+    action: "See output",
+  },
+  {
+    icon: Share2,
+    name: "Diagrams",
+    description: "VAJRA handshake, ESP32 telemetry architecture, drone sensor wiring.",
+    href: "/proof",
+    action: "View diagrams",
+  },
+  {
+    icon: Download,
+    name: "Resume",
+    description: "One-page engineering resume mapped to these systems.",
+    href: "/resume",
+    action: "Open resume",
+  },
+];
+---
+
+<section id="archive" class="archive-band" style="--accent: #60a5fa">
+  <div class="container-wide archive-shell" data-reveal>
+    <header class="archive-head">
+      <p class="micro-label" style="color: #60a5fa">Indexed Evidence</p>
+      <h2>PROOF ARCHIVE</h2>
+    </header>
+    <div class="archive-grid">
+      {categories.map((category) => (
+        <a class="archive-card" href={category.href}>
+          <span class="archive-icon" aria-hidden="true">
+            <category.icon size={20} />
+          </span>
+          <strong>{category.name}</strong>
+          <p>{category.description}</p>
+          <span class="archive-action">
+            {category.action}
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .archive-band {
+    border-top: 1px solid var(--hairline);
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .archive-shell {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .archive-head {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .archive-head h2 {
+    font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+    line-height: 1.02;
+  }
+
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .archive-card {
+    display: grid;
+    align-content: start;
+    gap: 0.65rem;
+    border: 1px solid color-mix(in srgb, #60a5fa 22%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    padding: 1.15rem;
+    transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .archive-card:hover,
+  .archive-card:focus-visible {
+    border-color: color-mix(in srgb, #60a5fa 58%, var(--color-border));
+    box-shadow: 0 0 26px rgba(96, 165, 250, 0.13);
+    transform: translateY(-3px);
+  }
+
+  .archive-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, #60a5fa 40%, var(--color-border));
+    border-radius: 0.5rem;
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+  }
+
+  .archive-card strong {
+    color: var(--color-text-strong);
+    font-size: 1.02rem;
+  }
+
+  .archive-card p {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .archive-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+    color: #60a5fa;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 1024px) {
+    .archive-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 540px) {
+    .archive-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

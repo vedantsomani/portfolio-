@@ -1,0 +1,232 @@
+---
+import EvidenceGrid from "@components/proof/EvidenceGrid.astro";
+import MediaFrame from "@components/proof/MediaFrame.astro";
+import Timeline from "@components/timeline/Timeline.tsx";
+import MainLayout from "@layouts/MainLayout.astro";
+import { getProofByIds } from "@lib/proof";
+
+const { project, Content } = Astro.props;
+const proof = getProofByIds(project.data.proofIds);
+const accent = project.data.accentColor;
+const facts = project.data.facts as { label: string; value: string }[];
+const stack = project.data.stack as string[];
+---
+
+<MainLayout
+  accent={accent}
+  meta={{
+    title: project.data.seo.title,
+    description: project.data.seo.description,
+    image: project.data.visual,
+  }}
+>
+  <article>
+    <section class="project-hero">
+      <div class="container-wide project-hero-grid">
+        <div class="project-hero-copy">
+          <p class="micro-label" style={`color: ${accent}`}>{project.data.eyebrow}</p>
+          <h1>{project.data.title}</h1>
+          <p>{project.data.summary}</p>
+          <div class="project-actions">
+            <a class="button button-primary" href="#evidence">View Evidence</a>
+            <a class="button" href="/proof">Proof Archive</a>
+          </div>
+        </div>
+        <MediaFrame
+          src={project.data.visual}
+          alt={project.data.visualAlt}
+          priority
+          caption={project.data.status}
+        />
+      </div>
+    </section>
+
+    <section class="section-band">
+      <div class="container project-facts">
+        {facts.map((fact) => (
+          <div class="technical-panel fact-card">
+            <p class="micro-label">{fact.label}</p>
+            <p>{fact.value}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-band">
+      <div class="container project-body-grid">
+        <aside class="toc-panel" aria-label="Project sections">
+          <p class="micro-label" style={`color: ${accent}`}>Inspect</p>
+          <a href="#narrative">Narrative</a>
+          <a href="#timeline">Timeline</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#stack">Stack</a>
+        </aside>
+        <div class="project-main">
+          <div id="narrative" class="prose-lab" style={`--accent: ${accent}`}>
+            <Content />
+          </div>
+
+          <section id="timeline" class="project-section">
+            <div class="section-heading">
+              <p class="micro-label" style={`color: ${accent}`}>Mission Timeline</p>
+              <h2>Trace The Work</h2>
+              <p>Each entry keeps the project inspectable by linking a system state to an evidence expectation.</p>
+            </div>
+            <Timeline events={project.data.timeline} accent={accent} client:visible />
+          </section>
+
+          <section id="evidence" class="project-section">
+            <div class="section-heading">
+              <p class="micro-label" style={`color: ${accent}`}>Evidence</p>
+              <h2>Proof Slots</h2>
+              <p>These cards are intentionally concrete. Replace placeholder frames with real logs, screenshots, photos, CAD exports, and code traces as they are available.</p>
+            </div>
+            <EvidenceGrid artifacts={proof} />
+          </section>
+
+          <section id="stack" class="project-section">
+            <div class="section-heading">
+              <p class="micro-label" style={`color: ${accent}`}>Build Stack</p>
+              <h2>Tools And Surfaces</h2>
+            </div>
+            <div class="stack-list">
+              {stack.map((item) => (
+                <span class="chip" style={`--accent: ${accent}`}>{item}</span>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </article>
+</MainLayout>
+
+<style>
+  .project-hero {
+    padding-block: clamp(6rem, 10vw, 9rem) clamp(3rem, 7vw, 5rem);
+  }
+
+  .project-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(320px, 1.12fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .project-hero-copy {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .project-hero h1 {
+    max-width: 11ch;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.92;
+  }
+
+  .project-hero-copy > p:not(.micro-label) {
+    max-width: 62ch;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .project-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .fact-card {
+    padding: 1.25rem;
+  }
+
+  .fact-card p:last-child {
+    margin-top: 0.65rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+
+  .project-body-grid {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .toc-panel {
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+    display: grid;
+    gap: 0.35rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: 1rem;
+  }
+
+  .toc-panel a {
+    border-radius: 0.375rem;
+    color: var(--color-text-muted);
+    padding: 0.45rem 0.25rem;
+    font-size: 0.93rem;
+  }
+
+  .toc-panel a:hover,
+  .toc-panel a:focus-visible {
+    color: var(--color-text-strong);
+  }
+
+  .project-main {
+    min-width: 0;
+  }
+
+  .project-section {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .project-hero-grid,
+    .project-body-grid,
+    .project-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .toc-panel {
+      position: static;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-left: 0;
+      border-top: 1px solid var(--color-border);
+      padding: 1rem 0 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .project-hero {
+      padding-top: 5rem;
+    }
+
+    .project-actions,
+    .toc-panel {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .button {
+      width: 100%;
+    }
+  }
+</style>

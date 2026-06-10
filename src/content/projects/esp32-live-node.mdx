@@ -1,0 +1,57 @@
+---
+title: "ESP32 Live Node"
+order: 3
+eyebrow: "Embedded telemetry"
+summary: "A transparent telemetry surface for node freshness, fallback states, sensor values, and API shape."
+status: "Cached MVP status"
+accent: "esp32"
+accentColor: "#22c55e"
+secondaryColor: "#60a5fa"
+visual: "/visuals/esp32-node.svg"
+visualAlt: "ESP32 telemetry node connected to sensor, power, and radio status panels."
+href: "/projects/esp32-live-node"
+metrics:
+  - label: "Node"
+    value: "esp32-s3-01"
+  - label: "Mode"
+    value: "Cached"
+  - label: "Endpoint"
+    value: "/api/status"
+facts:
+  - label: "Primary goal"
+    value: "Show live or cached lab state honestly, with freshness visible at all times."
+  - label: "Evidence"
+    value: "API contract, wiring photo, payload schema, and status panel behavior."
+  - label: "Limit"
+    value: "The current site ships a static cached payload until hardware telemetry is wired."
+timeline:
+  - time: "Now"
+    title: "Static fallback"
+    body: "Expose a cached JSON payload so the interface and failure states can be reviewed."
+  - time: "Next"
+    title: "Hardware feed"
+    body: "Replace fallback values with a narrow status endpoint fed by the node or broker."
+  - time: "Later"
+    title: "Freshness policy"
+    body: "Mark live, cached, warning, and offline states based on last-seen age."
+  - time: "Guard"
+    title: "No fake live"
+    body: "Never present stale payloads as realtime telemetry."
+stack: ["ESP32-S3", "Sensors", "JSON endpoint", "Telemetry", "Fallback states"]
+proofIds: ["esp32-status-01", "esp32-wiring-01"]
+seo:
+  title: "ESP32 Live Node"
+  description: "Embedded telemetry node page with cached status, API shape, freshness states, and wiring proof slots."
+---
+
+## What this mission proves
+
+The live node is designed around honesty. A cached payload is valuable in the MVP because it proves the interface contract without pretending the hardware stream is already online.
+
+## Evidence model
+
+The status panel should always show mode, last seen, and source. When the real node is connected, the same UI can shift from cached to live without changing the rest of the portfolio.
+
+## Current limit
+
+The real hardware feed still needs to be connected. Until then, the endpoint is static and clearly labeled as cached.

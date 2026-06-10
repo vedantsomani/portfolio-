@@ -1,0 +1,175 @@
+---
+import EvidenceGrid from "@components/proof/EvidenceGrid.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import { getProofByIds } from "@lib/proof";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const failures = await getCollection("failures");
+  return failures.map((failure) => ({
+    params: { slug: failure.id },
+    props: { failure },
+  }));
+}
+
+const { failure } = Astro.props;
+const { Content } = await render(failure);
+const proof = getProofByIds(failure.data.relatedProofIds);
+---
+
+<MainLayout
+  accent="#facc15"
+  meta={{
+    title: failure.data.seo.title,
+    description: failure.data.seo.description,
+    image: "/visuals/failure-wall.svg",
+  }}
+>
+  <article class="incident">
+    <section class="incident-hero">
+      <div class="container incident-grid">
+        <div>
+          <p class="micro-label" style="color: #facc15">{failure.data.failureId} / {failure.data.status}</p>
+          <h1>{failure.data.title}</h1>
+          <p>{failure.data.summary}</p>
+        </div>
+        <div class="technical-panel incident-facts">
+          <div>
+            <span>System</span>
+            <strong>{failure.data.system}</strong>
+          </div>
+          <div>
+            <span>Detected</span>
+            <strong class="mono-value">{failure.data.detectedAt}</strong>
+          </div>
+          <div>
+            <span>Severity</span>
+            <strong>{failure.data.severity}</strong>
+          </div>
+          <div>
+            <span>Tags</span>
+            <strong>{failure.data.tags.join(", ")}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-band">
+      <div class="container incident-body">
+        <div class="prose-lab" style="--accent: #facc15">
+          <Content />
+        </div>
+        <aside class="technical-panel incident-summary">
+          <p class="micro-label" style="color: #facc15">Diagnostic packet</p>
+          <dl>
+            <div>
+              <dt>Symptom</dt>
+              <dd>{failure.data.symptom}</dd>
+            </div>
+            <div>
+              <dt>Cause</dt>
+              <dd>{failure.data.rootCause}</dd>
+            </div>
+            <div>
+              <dt>Fix</dt>
+              <dd>{failure.data.fix}</dd>
+            </div>
+            <div>
+              <dt>Lesson</dt>
+              <dd>{failure.data.lesson}</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-band">
+      <div class="container incident-proof">
+        <div class="section-heading">
+          <p class="micro-label" style="color: #facc15">Related Evidence</p>
+          <h2>Proof Artifacts</h2>
+        </div>
+        <EvidenceGrid artifacts={proof} compact />
+      </div>
+    </section>
+  </article>
+</MainLayout>
+
+<style>
+  .incident-hero {
+    padding-block: clamp(6rem, 10vw, 9rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .incident-grid,
+  .incident-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  h1 {
+    max-width: 12ch;
+    margin-top: 0.9rem;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.92;
+  }
+
+  .incident-hero p:not(.micro-label) {
+    max-width: 62ch;
+    margin-top: 1rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .incident-facts,
+  .incident-summary {
+    display: grid;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .incident-facts span,
+  .incident-summary dt {
+    display: block;
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .incident-facts strong {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--color-text-strong);
+    overflow-wrap: anywhere;
+  }
+
+  .incident-summary dl {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .incident-summary dd {
+    margin: 0.3rem 0 0;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .incident-proof {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .incident-grid,
+    .incident-body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

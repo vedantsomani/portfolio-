@@ -1,0 +1,116 @@
+---
+import FailureExplorer, { type FailureTicket } from "@components/failures/FailureExplorer.tsx";
+import EvidenceGrid from "@components/proof/EvidenceGrid.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import { getProofByIds } from "@lib/proof";
+
+const failures = (await getCollection("failures")).sort((a, b) => a.data.order - b.data.order);
+const failureTickets: FailureTicket[] = failures.map((failure) => ({
+  slug: failure.id,
+  failureId: failure.data.failureId,
+  title: failure.data.title,
+  system: failure.data.system,
+  severity: failure.data.severity,
+  status: failure.data.status,
+  detectedAt: failure.data.detectedAt,
+  summary: failure.data.summary,
+  symptom: failure.data.symptom,
+  cause: failure.data.rootCause,
+  fix: failure.data.fix,
+  lesson: failure.data.lesson,
+  tags: failure.data.tags,
+  href: `/failures/${failure.id}`,
+  evidence: getProofByIds(failure.data.relatedProofIds).map((artifact) => ({
+    label: artifact.title,
+    href: artifact.href,
+  })),
+}));
+const relatedProof = getProofByIds(Array.from(new Set(failures.flatMap((failure) => failure.data.relatedProofIds))));
+---
+
+<MainLayout
+  accent="#facc15"
+  meta={{
+    title: "Failure Log",
+    description: "Public debug log for VEDANT LAB: what broke, why it broke, how it was fixed, and what changed.",
+    image: "/visuals/failure-wall.svg",
+  }}
+>
+  <section class="failure-hero">
+    <div class="container-wide failure-hero-grid">
+      <div>
+        <p class="micro-label" style="color: #facc15">Public Debug Log</p>
+        <h1>FAILURE LOG</h1>
+        <p>What broke. Why it broke. What changed.</p>
+      </div>
+      <img src="/visuals/failure-wall.svg" alt="Failure wall incident visual." width="1200" height="800" loading="eager" fetchpriority="high" />
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="container-wide failure-body">
+      <FailureExplorer failures={failureTickets} showFilter client:visible />
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="container-wide failure-proof">
+      <div class="section-heading">
+        <p class="micro-label" style="color: #facc15">Linked Evidence</p>
+        <h2>Artifacts Behind The Incidents</h2>
+        <p>Each ticket points back to the proof surface that made it visible.</p>
+      </div>
+      <EvidenceGrid artifacts={relatedProof} />
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .failure-hero {
+    padding-block: clamp(6rem, 10vw, 9rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .failure-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1.18fr);
+    gap: 2rem;
+    align-items: center;
+  }
+
+  h1 {
+    max-width: 10ch;
+    margin-top: 0.9rem;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.9;
+  }
+
+  .failure-hero p:not(.micro-label) {
+    max-width: 56ch;
+    margin-top: 1rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .failure-hero img {
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--color-failure) 28%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+  }
+
+  .failure-proof {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 880px) {
+    .failure-hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

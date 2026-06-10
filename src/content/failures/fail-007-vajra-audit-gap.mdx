@@ -1,0 +1,31 @@
+---
+failureId: "FAIL-007"
+title: "VAJRA Audit Gap"
+order: 2
+status: "Roadmap open"
+severity: "high"
+system: "Secure communication protocol"
+detectedAt: "2026-06-08T15:10:00+05:30"
+summary: "The handshake prototype runs, but no formal verification or external review has been performed yet."
+symptom: "Security claims could not be backed by independent review. The protocol only had self-written tests."
+rootCause: "Solo prototype development outpaced the verification plan, and no external reviewers were engaged."
+fix: "Wrote an explicit audit roadmap, scoped a threat model, and downgraded every public claim to prototype language."
+lesson: "A security protocol without external review is a hypothesis. Keep claims conservative until verification exists."
+relatedProofIds: ["vajra-handshake-01", "vajra-code-02"]
+tags: ["rust", "protocol", "audit"]
+seo:
+  title: "FAIL-007 VAJRA Audit Gap"
+  description: "Failure note documenting the missing external audit and formal verification for the VAJRA secure-link prototype."
+---
+
+## What broke
+
+Nothing crashed. What broke was the gap between how finished the protocol looked and how verified it actually was. An unreviewed handshake is not a security claim.
+
+## Why it broke
+
+Implementation is fun and review logistics are not, so the code moved faster than the verification plan. There was no threat model document and no scheduled external review.
+
+## What changed
+
+The project now carries an audit roadmap as a first-class artifact. The public language is fixed at "prototype, under verification, external audit pending" until that roadmap is executed.

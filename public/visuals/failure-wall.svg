@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Failure wall visual</title>
+  <desc id="desc">Incident cards with symptoms, root cause notes, severity state, and proof links.</desc>
+  <rect width="1200" height="800" fill="#070a0f"/>
+  <rect x="70" y="70" width="1060" height="660" rx="12" fill="#0e1116" stroke="#243041" stroke-width="2"/>
+  <text x="130" y="145" fill="#facc15" font-family="ui-monospace, monospace" font-size="30" font-weight="700">FAILURE WALL</text>
+  <text x="130" y="184" fill="#aab4c3" font-family="ui-monospace, monospace" font-size="18">Incidents stay visible until the system changes.</text>
+  <g font-family="ui-monospace, monospace">
+    <g transform="translate(130 245)">
+      <rect width="880" height="112" rx="8" fill="#111821" stroke="#facc15" stroke-width="3"/>
+      <text x="28" y="42" fill="#f5f7fa" font-size="22" font-weight="700">FAIL-003 OPTICAL FLOW HEALTH</text>
+      <text x="28" y="78" fill="#aab4c3" font-size="17">symptom: BAD OPTFLOW HEALTH | next: constrained retest</text>
+      <circle cx="820" cy="54" r="16" fill="#facc15"/>
+    </g>
+    <g transform="translate(130 390)">
+      <rect width="880" height="112" rx="8" fill="#111821" stroke="#22d3ee" stroke-width="2"/>
+      <text x="28" y="42" fill="#f5f7fa" font-size="22" font-weight="700">FAIL-007 RETRY WINDOW AMBIGUITY</text>
+      <text x="28" y="78" fill="#aab4c3" font-size="17">symptom: packet trace was underspecified | next: negative tests</text>
+      <circle cx="820" cy="54" r="16" fill="#22d3ee"/>
+    </g>
+    <g transform="translate(130 535)">
+      <rect width="880" height="112" rx="8" fill="#111821" stroke="#f97316" stroke-width="2"/>
+      <text x="28" y="42" fill="#f5f7fa" font-size="22" font-weight="700">FAIL-009 BRACKET PRINT WARP</text>
+      <text x="28" y="78" fill="#aab4c3" font-size="17">symptom: lifted mounting face | next: rotate print</text>
+      <circle cx="820" cy="54" r="16" fill="#f97316"/>
+    </g>
+  </g>
+</svg>

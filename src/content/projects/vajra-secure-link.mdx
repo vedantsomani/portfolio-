@@ -1,0 +1,57 @@
+---
+title: "VAJRA Secure Link"
+order: 2
+eyebrow: "Rust protocol lab"
+summary: "A secure-link prototype focused on packet structure, handshake clarity, retry behavior, and audit-ready proof."
+status: "Prototype under audit"
+accent: "vajra"
+accentColor: "#38bdf8"
+secondaryColor: "#8b5cf6"
+visual: "/visuals/vajra-link.svg"
+visualAlt: "Secure-link protocol graph with sender, verifier, receiver, and packet flow states."
+href: "/projects/vajra-secure-link"
+metrics:
+  - label: "Language"
+    value: "Rust"
+  - label: "Surface"
+    value: "Protocol"
+  - label: "Focus"
+    value: "Auditability"
+facts:
+  - label: "Primary goal"
+    value: "Make the handshake, retry, and verification states visible enough to critique."
+  - label: "Evidence"
+    value: "Handshake diagram, packet traces, code tests, and audit notes."
+  - label: "Limit"
+    value: "The cryptographic claims should remain conservative until reviewed."
+timeline:
+  - time: "Phase 1"
+    title: "Packet structure"
+    body: "Define stable fields, nonce boundaries, and explicit failure states."
+  - time: "Phase 2"
+    title: "Handshake path"
+    body: "Map sender, verifier, and receiver behavior so the protocol can be inspected quickly."
+  - time: "Phase 3"
+    title: "Negative tests"
+    body: "Add malformed packet, replay, timeout, and retry cases to the proof archive."
+  - time: "Phase 4"
+    title: "Audit pass"
+    body: "Publish limitations and review notes alongside the implementation."
+stack: ["Rust", "Protocol design", "Packet tracing", "Security review", "Testing"]
+proofIds: ["vajra-handshake-01", "vajra-code-02"]
+seo:
+  title: "VAJRA Secure Link"
+  description: "Rust secure-link prototype with protocol diagrams, packet evidence, and an audit-first roadmap."
+---
+
+## What this mission proves
+
+VAJRA is framed as a secure communication lab, not as an overclaimed encryption product. The strongest proof is the ability to show packet states, negative paths, retry decisions, and the limits of the current implementation.
+
+## Evidence model
+
+The protocol graph should be paired with packet traces and tests. A recruiter or reviewer should be able to follow the path from a message to its validation result without reverse-engineering the whole repository.
+
+## Current limit
+
+Security language must stay precise. Until the code is reviewed and the threat model is explicit, the page should describe a secure-link prototype and audit surface rather than a finished security system.

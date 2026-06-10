@@ -1,0 +1,96 @@
+---
+import StatusPanel from "@components/status/StatusPanel.tsx";
+import MainLayout from "@layouts/MainLayout.astro";
+import { cachedStatus } from "@lib/status";
+
+const payload = JSON.stringify(cachedStatus, null, 2);
+---
+
+<MainLayout
+  accent="#22c55e"
+  meta={{
+    title: "ESP32 Status",
+    description: "Cached ESP32 lab status surface for VEDANT LAB with freshness, telemetry values, and JSON contract.",
+    image: "/visuals/esp32-node.svg",
+  }}
+>
+  <section class="status-hero">
+    <div class="container-wide status-grid">
+      <div>
+        <p class="micro-label" style="color: #22c55e">ESP32 Live Node</p>
+        <h1>Status Surface</h1>
+        <p>The MVP ships a cached payload and makes freshness visible. The contract is ready for a real hardware feed later.</p>
+      </div>
+      <StatusPanel initialStatus={cachedStatus} accent="#22c55e" client:visible />
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="container status-contract">
+      <div class="section-heading">
+        <p class="micro-label" style="color: #22c55e">API Contract</p>
+        <h2>Cached JSON Payload</h2>
+        <p>The endpoint is available at <code>/api/status</code> and uses a short cache policy.</p>
+      </div>
+      <pre><code>{payload}</code></pre>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .status-hero {
+    padding-block: clamp(6rem, 10vw, 9rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+    gap: 2rem;
+    align-items: center;
+  }
+
+  h1 {
+    max-width: 11ch;
+    margin-top: 0.9rem;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.9;
+  }
+
+  .status-hero p:not(.micro-label) {
+    max-width: 58ch;
+    margin-top: 1rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .status-contract {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  pre {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    color: var(--color-text-strong);
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  code {
+    font-family: inherit;
+  }
+
+  @media (max-width: 860px) {
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

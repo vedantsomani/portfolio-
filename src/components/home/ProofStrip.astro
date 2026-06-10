@@ -1,0 +1,235 @@
+---
+type Tile = {
+  category: string;
+  label: string;
+  media: string;
+  alt: string;
+  href: string;
+  accent: string;
+  placeholder: boolean;
+};
+
+const tiles: Tile[] = [
+  {
+    category: "Photo",
+    label: "F450 drone build",
+    media: "/visuals/drone-mission.svg",
+    alt: "Drone platform build photo slot.",
+    href: "/projects/drone-mission-replay#evidence",
+    accent: "#f59e0b",
+    placeholder: true,
+  },
+  {
+    category: "Screenshot",
+    label: "Mission Planner replay",
+    media: "/visuals/drone-mission.svg",
+    alt: "Mission Planner telemetry screenshot slot.",
+    href: "/projects/drone-mission-replay#evidence",
+    accent: "#f59e0b",
+    placeholder: true,
+  },
+  {
+    category: "Wiring",
+    label: "ESP32 sensor bench",
+    media: "/visuals/esp32-node.svg",
+    alt: "ESP32 wiring photo slot.",
+    href: "/projects/esp32-live-node#evidence",
+    accent: "#22c55e",
+    placeholder: true,
+  },
+  {
+    category: "Code",
+    label: "VAJRA handshake in Rust",
+    media: "/visuals/vajra-link.svg",
+    alt: "VAJRA Rust code screenshot slot.",
+    href: "/projects/vajra-secure-link#evidence",
+    accent: "#8b5cf6",
+    placeholder: true,
+  },
+  {
+    category: "Print",
+    label: "3D printed parts",
+    media: "/visuals/fabrication-bench.svg",
+    alt: "3D print photo slot.",
+    href: "/projects/fabrication-bench#evidence",
+    accent: "#f97316",
+    placeholder: true,
+  },
+];
+---
+
+<section id="proof" class="proof-strip" aria-label="Real proof tiles" data-reveal>
+  <div class="container-wide proof-strip-shell">
+    <header class="proof-strip-head">
+      <div>
+        <p class="micro-label" style="color: #60a5fa">Evidence First</p>
+        <h2>REAL PROOF</h2>
+      </div>
+      <a class="proof-strip-link" href="/proof">Open full archive →</a>
+    </header>
+    <div class="proof-tiles">
+      {tiles.map((tile) => (
+        <a class="proof-tile" href={tile.href} style={`--accent: ${tile.accent}`}>
+          <span class="proof-tile-media">
+            <img src={tile.media} alt={tile.alt} width="600" height="450" loading="lazy" decoding="async" />
+            {tile.placeholder && <span class="proof-tile-slot">slot · add real media</span>}
+          </span>
+          <span class="proof-tile-meta">
+            <span class="proof-tile-chip">{tile.category}</span>
+            <strong>{tile.label}</strong>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .proof-strip {
+    border-top: 1px solid var(--hairline);
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background: rgba(14, 17, 22, 0.45);
+  }
+
+  .proof-strip-shell {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .proof-strip-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .proof-strip-head h2 {
+    margin-top: 0.6rem;
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    line-height: 1;
+  }
+
+  .proof-strip-link {
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.16s ease;
+  }
+
+  .proof-strip-link:hover,
+  .proof-strip-link:focus-visible {
+    color: var(--color-text-strong);
+  }
+
+  .proof-tiles {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .proof-tile {
+    display: grid;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .proof-tile-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .proof-tile-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+
+  .proof-tile:hover .proof-tile-media,
+  .proof-tile:focus-visible .proof-tile-media {
+    border-color: color-mix(in srgb, var(--accent) 58%, var(--color-border));
+    box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .proof-tile:hover .proof-tile-media img,
+  .proof-tile:focus-visible .proof-tile-media img {
+    transform: scale(1.05);
+  }
+
+  .proof-tile-slot {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
+    background: rgba(5, 6, 8, 0.85);
+    color: var(--color-text-soft);
+    padding: 0.22rem 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .proof-tile-meta {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .proof-tile-chip {
+    justify-self: start;
+    border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--color-border));
+    border-radius: 999px;
+    color: color-mix(in srgb, var(--accent) 85%, white);
+    padding: 0.18rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .proof-tile-meta strong {
+    color: var(--color-text-strong);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 1024px) {
+    .proof-tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Horizontal scroll keeps tiles large and swipeable on phones. */
+    .proof-tiles {
+      display: flex;
+      gap: 0.8rem;
+      margin-inline: -1.25rem;
+      padding-inline: 1.25rem;
+      padding-bottom: 0.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .proof-tile {
+      flex: 0 0 70%;
+      max-width: 280px;
+      scroll-snap-align: start;
+    }
+  }
+</style>

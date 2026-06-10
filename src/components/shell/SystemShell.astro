@@ -1,0 +1,115 @@
+---
+interface Props {
+  id: string;
+  number: string;
+  title: string;
+  subtitle: string;
+  status: string;
+  accent: string;
+  secondary?: string;
+}
+
+const { id, number, title, subtitle, status, accent, secondary } = Astro.props;
+---
+
+<section id={id} class="system-band" style={`--accent: ${accent}; --secondary: ${secondary ?? accent}`}>
+  <div class="container-wide system-shell" data-reveal>
+    <header class="system-head">
+      <div class="system-head-copy">
+        <p class="system-eyebrow">
+          <span class="mono-value">{number}</span> / SYSTEM
+        </p>
+        <h2>{title}</h2>
+        <p class="system-sub">{subtitle}</p>
+      </div>
+      <span class="system-status">
+        <span class="system-status-dot" aria-hidden="true"></span>
+        {status}
+      </span>
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .system-band {
+    border-top: 1px solid var(--hairline);
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .system-shell {
+    display: grid;
+    gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  .system-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .system-head-copy {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 760px;
+  }
+
+  .system-eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .system-eyebrow span {
+    font-size: 0.95rem;
+  }
+
+  .system-head h2 {
+    font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+    line-height: 1.02;
+  }
+
+  .system-sub {
+    color: var(--color-text-muted);
+    font-size: clamp(0.97rem, 1.4vw, 1.08rem);
+    line-height: 1.65;
+    max-width: 64ch;
+  }
+
+  .system-status {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--color-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 9%, var(--color-bg-1));
+    color: color-mix(in srgb, var(--accent) 82%, white);
+    padding: 0.5rem 0.95rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .system-status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--accent);
+    animation: status-pulse 1.8s ease-in-out infinite;
+  }
+
+  @media (max-width: 760px) {
+    .system-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

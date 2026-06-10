@@ -1,0 +1,159 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+
+const profileJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    name: "Vedant",
+    description: "Engineering portfolio focused on robotics, embedded systems, secure communication, fabrication, and failure analysis.",
+  },
+};
+---
+
+<MainLayout
+  accent="#60a5fa"
+  meta={{
+    title: "About",
+    description: "About Vedant and the proof-first engineering portfolio behind VEDANT LAB.",
+    image: "/visuals/proof-archive.svg",
+  }}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(profileJsonLd)} />
+
+  <section class="about-hero">
+    <div class="container about-grid">
+      <div>
+        <p class="micro-label" style="color: #60a5fa">About</p>
+        <h1>Built For Inspection</h1>
+        <p>
+          I am Vedant Somani, an engineering student focused on robotics, embedded systems, and
+          secure communication. My work sits at the intersection of hardware, software, and
+          failure: Pixhawk drone systems, ESP32 telemetry, Rust security protocols, and 3D printed
+          mechanical prototypes.
+        </p>
+        <p>
+          This portfolio is a public engineering log: what I built, what broke, what I verified,
+          and what still needs work.
+        </p>
+      </div>
+      <div class="technical-panel contact-panel">
+        <p class="micro-label">Contact</p>
+        <div>
+          <a class="button" href="mailto:vedantsomani12@gmail.com">Email</a>
+          {/* TODO: replace with real profile URLs and a final resume PDF when ready */}
+          <a class="button" href="https://github.com/">GitHub</a>
+          <a class="button" href="https://www.linkedin.com/">LinkedIn</a>
+          <a class="button" href="/resume">Resume</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="container resume-map">
+      <div class="section-heading">
+        <p class="micro-label" style="color: #60a5fa">Resume Alignment</p>
+        <h2>Every Claim Gets A Page</h2>
+        <p>Strong resume lines should map directly to proof surfaces inside the lab.</p>
+      </div>
+      <div class="claim-grid">
+        <a class="technical-panel" href="/projects/drone-mission-replay">
+          <span>Pixhawk drone platform</span>
+          <strong>Drone Mission Replay</strong>
+        </a>
+        <a class="technical-panel" href="/projects/vajra-secure-link">
+          <span>Rust secure-link prototype</span>
+          <strong>VAJRA Secure Link</strong>
+        </a>
+        <a class="technical-panel" href="/projects/esp32-live-node">
+          <span>ESP32 telemetry node</span>
+          <strong>ESP32 Live Node</strong>
+        </a>
+        <a class="technical-panel" href="/projects/fabrication-bench">
+          <span>CAD and printed parts</span>
+          <strong>Fabrication Bench</strong>
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .about-hero {
+    padding-block: clamp(6rem, 10vw, 9rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: 2rem;
+    align-items: end;
+  }
+
+  h1 {
+    max-width: 11ch;
+    margin-top: 0.9rem;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.9;
+  }
+
+  .about-hero p:not(.micro-label) {
+    max-width: 62ch;
+    margin-top: 1rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .contact-panel {
+    display: grid;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .contact-panel div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .resume-map {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .claim-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .claim-grid a {
+    display: grid;
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+
+  .claim-grid span {
+    color: var(--color-text-soft);
+    font-size: 0.84rem;
+  }
+
+  .claim-grid strong {
+    color: var(--color-text-strong);
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid,
+    .claim-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

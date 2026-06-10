@@ -1,0 +1,57 @@
+---
+title: "Drone Mission Replay"
+order: 1
+eyebrow: "Pixhawk autonomy"
+summary: "A flight-test workspace for mission planning, sensor health, replay evidence, and controlled abort decisions."
+status: "Debugging optical-flow health"
+accent: "drone"
+accentColor: "#f59e0b"
+secondaryColor: "#60a5fa"
+visual: "/visuals/drone-mission.svg"
+visualAlt: "A quadcopter mission diagram with waypoint timeline and sensor health markers."
+href: "/projects/drone-mission-replay"
+metrics:
+  - label: "Autopilot"
+    value: "Pixhawk"
+  - label: "Mode"
+    value: "Replay + test"
+  - label: "Current risk"
+    value: "OPTFLOW health"
+facts:
+  - label: "Primary goal"
+    value: "Prove a reliable autonomous mission path before extending flight complexity."
+  - label: "Evidence"
+    value: "Flight logs, Mission Planner screenshots, parameter notes, and incident links."
+  - label: "Limit"
+    value: "Live outdoor flight media still needs to replace placeholder evidence frames."
+timeline:
+  - time: "00:00"
+    title: "Bench validation"
+    body: "Document wiring, sensor placement assumptions, and firmware state before field testing."
+  - time: "03:20"
+    title: "Mission Planner replay"
+    body: "Review mode transitions, EKF behavior, optical-flow health, and abort markers."
+  - time: "07:45"
+    title: "Failure capture"
+    body: "Record BAD OPTFLOW HEALTH as a test artifact rather than hiding it from the project."
+  - time: "Next"
+    title: "Constrained retest"
+    body: "Change one variable at a time: placement, surface texture, calibration, then parameter tuning."
+stack: ["Pixhawk", "Mission Planner", "ArduPilot", "Optical flow", "Flight logs"]
+proofIds: ["drone-flightlog-23", "drone-mp-01", "failure-wall-003"]
+seo:
+  title: "Drone Mission Replay"
+  description: "Pixhawk mission replay with flight-log evidence, optical-flow debugging, and constrained retest planning."
+---
+
+## What this mission proves
+
+This page is built around the part of drone work that is hardest to fake: the chain from hardware assumptions to replay evidence to the next controlled test. The goal is not to claim a perfect flight. The goal is to show that the system is being debugged like an engineering platform.
+
+## Evidence model
+
+Each flight attempt should leave behind a small packet of proof: the Mission Planner screenshot, the relevant log slice, the parameter state, the sensor placement photo, and the incident note if anything degraded. Those artifacts make the project inspectable without forcing the homepage to carry the whole story.
+
+## Current limit
+
+The present risk is optical-flow health. The next test should constrain variables tightly enough that each result can move the system forward instead of creating another ambiguous run.

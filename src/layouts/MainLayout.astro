@@ -1,0 +1,71 @@
+---
+import SiteFooter from "@components/shell/SiteFooter.astro";
+import SiteHeader from "@components/shell/SiteHeader.astro";
+import { defaultMeta, pageTitle, type PageMeta } from "@lib/seo";
+import "@fontsource-variable/inter/index.css";
+import "@fontsource-variable/space-grotesk/index.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/600.css";
+import "@styles/globals.css";
+
+interface Props {
+  meta?: PageMeta;
+  accent?: string;
+}
+
+const { meta = defaultMeta, accent = "#60a5fa" } = Astro.props;
+const resolvedTitle = meta.title === defaultMeta.title ? meta.title : pageTitle(meta.title);
+const description = meta.description ?? defaultMeta.description;
+const image = meta.image ?? defaultMeta.image ?? "/visuals/proof-archive.svg";
+const site = Astro.site ?? Astro.url;
+const canonical = meta.canonical ?? new URL(Astro.url.pathname, site).toString();
+const ogImage = new URL(image, site).toString();
+---
+
+<!doctype html>
+<html lang="en" style={`--accent: ${accent}`}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#050608" />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <SiteHeader />
+      <main id="main" class="page-main">
+        <slot />
+      </main>
+      <SiteFooter />
+    </div>
+    <script>
+      const targets = document.querySelectorAll("[data-reveal]");
+      if (targets.length > 0) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-in");
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px" },
+        );
+        for (const target of targets) observer.observe(target);
+      }
+    </script>
+  </body>
+</html>

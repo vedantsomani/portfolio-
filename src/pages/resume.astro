@@ -1,0 +1,168 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+
+const proofLinks = [
+  { label: "Drone Mission Replay", href: "/projects/drone-mission-replay" },
+  { label: "VAJRA Secure Link", href: "/projects/vajra-secure-link" },
+  { label: "ESP32 Live Node", href: "/projects/esp32-live-node" },
+  { label: "Fabrication Bench", href: "/projects/fabrication-bench" },
+  { label: "Failure Wall", href: "/failures" },
+];
+---
+
+<MainLayout
+  accent="#60a5fa"
+  meta={{
+    title: "Resume",
+    description: "Resume surface for Vedant Somani with proof-backed engineering areas and contact links.",
+    image: "/visuals/proof-archive.svg",
+  }}
+>
+  <section class="resume-hero">
+    <div class="container resume-grid">
+      <div>
+        <p class="micro-label" style="color: #60a5fa">Resume</p>
+        <h1>Vedant Somani</h1>
+        <p>Engineering student focused on robotics, embedded systems, secure communication, fabrication, and failure analysis.</p>
+        <div class="resume-actions">
+          <a class="button button-primary" href="mailto:vedantsomani12@gmail.com">Email</a>
+          <a class="button" href="/#contact">Contact Surface</a>
+        </div>
+      </div>
+      <aside class="technical-panel resume-panel">
+        <p class="micro-label">Proof-backed areas</p>
+        <ul>
+          {proofLinks.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="container resume-body">
+      <div class="section-heading">
+        <p class="micro-label" style="color: #60a5fa">Snapshot</p>
+        <h2>Systems, Evidence, Limits</h2>
+        <p>Replace this page with a polished PDF or detailed resume when the final document is ready. The current surface keeps recruiter navigation live and routes every claim toward proof.</p>
+      </div>
+      <div class="resume-cards">
+        <article class="technical-panel">
+          <span>Robotics</span>
+          <strong>Pixhawk/F450 mission replay, sensor health, and controlled failure capture.</strong>
+        </article>
+        <article class="technical-panel">
+          <span>Secure Systems</span>
+          <strong>Rust secure-link prototype with protocol visualization and audit gaps.</strong>
+        </article>
+        <article class="technical-panel">
+          <span>Embedded</span>
+          <strong>ESP32 telemetry node with explicit live, cached, and offline states.</strong>
+        </article>
+        <article class="technical-panel">
+          <span>Fabrication</span>
+          <strong>CAD, print iteration, material notes, and failed-print evidence.</strong>
+        </article>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .resume-hero {
+    padding-block: clamp(5rem, 9vw, 8rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .resume-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: 2rem;
+    align-items: end;
+  }
+
+  h1 {
+    max-width: 11ch;
+    margin-top: 0.9rem;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.9;
+  }
+
+  .resume-hero p:not(.micro-label) {
+    max-width: 62ch;
+    margin-top: 1rem;
+    color: var(--color-text-muted);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.2rem;
+  }
+
+  .resume-panel {
+    padding: 1.1rem;
+  }
+
+  .resume-panel ul {
+    display: grid;
+    gap: 0.65rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resume-panel a {
+    color: var(--color-text-muted);
+    font-weight: 700;
+  }
+
+  .resume-panel a:hover,
+  .resume-panel a:focus-visible {
+    color: var(--color-text-strong);
+  }
+
+  .resume-body {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .resume-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .resume-cards article {
+    padding: 1rem;
+  }
+
+  .resume-cards span {
+    color: #60a5fa;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .resume-cards strong {
+    display: block;
+    margin-top: 0.65rem;
+    color: var(--color-text-strong);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 880px) {
+    .resume-grid,
+    .resume-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

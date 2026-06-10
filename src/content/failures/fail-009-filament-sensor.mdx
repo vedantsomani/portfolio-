@@ -1,0 +1,31 @@
+---
+failureId: "FAIL-009"
+title: "Bambu A1 Filament Sensor Failure"
+order: 3
+status: "Workaround in place"
+severity: "medium"
+system: "3D printing workflow"
+detectedAt: "2026-06-07T11:25:00+05:30"
+summary: "False filament-runout triggers paused long prints mid-run and left visible seams on restart."
+symptom: "The printer paused with a runout warning while filament was still feeding correctly."
+rootCause: "Debris in the filament sensor path caused intermittent false runout readings."
+fix: "Cleaned the sensor path, recalibrated, and added a manual filament-path check before every multi-hour print."
+lesson: "Consumable sensors need their own maintenance loop. Verify the sensor before trusting it with a long job."
+relatedProofIds: ["fabrication-cad-01"]
+tags: ["fabrication", "3d-printing", "bambu-a1"]
+seo:
+  title: "FAIL-009 Bambu A1 Filament Sensor Failure"
+  description: "Fabrication failure note for false filament-runout triggers on a Bambu A1 and the resulting pre-print check."
+---
+
+## What broke
+
+Multi-hour prints paused mid-run on phantom filament-runout warnings. Each restart left a seam at the pause layer, which is a defect on visible surfaces.
+
+## Why it broke
+
+The runout sensor accumulated debris in the filament path and started reporting intermittent false positives. The workflow trusted the sensor without ever inspecting it.
+
+## What changed
+
+The sensor path is now part of the pre-print routine for long jobs, and the failed prints stay on the bench as evidence of why that check exists.

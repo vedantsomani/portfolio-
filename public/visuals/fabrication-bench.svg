@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Fabrication bench visual</title>
+  <desc id="desc">CAD bracket, print bed, caliper, and iteration markers for fabrication proof.</desc>
+  <rect width="1200" height="800" fill="#070a0f"/>
+  <rect x="70" y="70" width="1060" height="660" rx="12" fill="#0e1116" stroke="#243041" stroke-width="2"/>
+  <g transform="translate(130 135)">
+    <rect width="410" height="290" rx="8" fill="#111821" stroke="#2c3b50"/>
+    <text x="28" y="48" fill="#f97316" font-family="ui-monospace, monospace" font-size="22" font-weight="700">CAD FRAME</text>
+    <path d="M108 214h205l42-82H150l-42 82Z" fill="#141922" stroke="#f97316" stroke-width="4"/>
+    <path d="M150 132l50-55h205l-50 55" fill="none" stroke="#facc15" stroke-width="4"/>
+    <path d="M355 132v82M405 77v82" stroke="#facc15" stroke-width="4"/>
+    <circle cx="190" cy="182" r="18" fill="#0e1116" stroke="#60a5fa" stroke-width="4"/>
+    <circle cx="278" cy="182" r="18" fill="#0e1116" stroke="#60a5fa" stroke-width="4"/>
+  </g>
+  <g transform="translate(650 120)">
+    <rect width="390" height="320" rx="8" fill="#111821" stroke="#2c3b50"/>
+    <text x="26" y="48" fill="#f5f7fa" font-family="ui-monospace, monospace" font-size="22" font-weight="700">PRINT BED</text>
+    <rect x="55" y="105" width="280" height="150" rx="8" fill="#141922" stroke="#f97316" stroke-width="4"/>
+    <path d="M90 205c40-54 84-70 132-48 47 22 76 19 87-8" fill="none" stroke="#facc15" stroke-width="8" stroke-linecap="round"/>
+    <path d="M90 205h220" stroke="#243041" stroke-width="4"/>
+    <text x="55" y="290" fill="#aab4c3" font-family="ui-monospace, monospace" font-size="17">warp captured as proof</text>
+  </g>
+  <g transform="translate(180 520)" font-family="ui-monospace, monospace">
+    <rect width="820" height="105" rx="8" fill="#111821" stroke="#2c3b50"/>
+    <text x="30" y="40" fill="#aab4c3" font-size="17">REV A: bracket lifted at corner</text>
+    <text x="30" y="73" fill="#aab4c3" font-size="17">REV B: rotate print, adjust supports, measure fit</text>
+    <path d="M610 52h130" stroke="#f97316" stroke-width="9" stroke-linecap="round"/>
+    <path d="M610 52h74" stroke="#facc15" stroke-width="9" stroke-linecap="round"/>
+  </g>
+</svg>

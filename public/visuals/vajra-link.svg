@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">VAJRA secure link visual</title>
+  <desc id="desc">Secure protocol nodes, packet lanes, handshake state, and audit checkpoints.</desc>
+  <rect width="1200" height="800" fill="#070a0f"/>
+  <rect x="70" y="70" width="1060" height="660" rx="12" fill="#0e1116" stroke="#243041" stroke-width="2"/>
+  <path d="M170 205H1030M170 400H1030M170 595H1030" stroke="#172235" stroke-width="2"/>
+  <g stroke-width="5" fill="none" stroke-linecap="round">
+    <path d="M250 400C365 260 490 250 600 400C710 550 835 540 950 400" stroke="#22d3ee"/>
+    <path d="M250 400C365 540 490 550 600 400C710 250 835 260 950 400" stroke="#8b5cf6"/>
+  </g>
+  <g>
+    <circle cx="250" cy="400" r="82" fill="#141922" stroke="#22d3ee" stroke-width="4"/>
+    <circle cx="600" cy="400" r="95" fill="#141922" stroke="#8b5cf6" stroke-width="4"/>
+    <circle cx="950" cy="400" r="82" fill="#141922" stroke="#22d3ee" stroke-width="4"/>
+  </g>
+  <g fill="#f5f7fa" font-family="ui-monospace, monospace" text-anchor="middle" font-weight="700">
+    <text x="250" y="388" font-size="28">SENDER</text>
+    <text x="600" y="388" font-size="28">VERIFY</text>
+    <text x="950" y="388" font-size="28">RECEIVER</text>
+  </g>
+  <g fill="#aab4c3" font-family="ui-monospace, monospace" text-anchor="middle" font-size="17">
+    <text x="250" y="424">nonce + packet</text>
+    <text x="600" y="424">key state + audit</text>
+    <text x="950" y="424">ack + retry</text>
+  </g>
+  <rect x="130" y="110" width="360" height="110" rx="8" fill="#111821" stroke="#2c3b50"/>
+  <text x="158" y="150" fill="#22d3ee" font-family="ui-monospace, monospace" font-size="20" font-weight="700">VAJRA HANDSHAKE</text>
+  <text x="158" y="185" fill="#aab4c3" font-family="ui-monospace, monospace" font-size="17">STATE: prototype under audit</text>
+  <g transform="translate(730 125)" font-family="ui-monospace, monospace">
+    <rect width="315" height="118" rx="8" fill="#111821" stroke="#2c3b50"/>
+    <text x="24" y="39" fill="#f5f7fa" font-size="20" font-weight="700">PACKET INSPECTOR</text>
+    <text x="24" y="75" fill="#aab4c3" font-size="16">retry_window: explicit</text>
+    <text x="24" y="101" fill="#aab4c3" font-size="16">negative_tests: pending</text>
+  </g>
+  <g fill="#141922" stroke="#22d3ee" stroke-width="3">
+    <rect x="205" y="585" width="150" height="54" rx="8"/>
+    <rect x="525" y="585" width="150" height="54" rx="8"/>
+    <rect x="845" y="585" width="150" height="54" rx="8"/>
+  </g>
+  <g fill="#f5f7fa" font-family="ui-monospace, monospace" font-size="16" text-anchor="middle">
+    <text x="280" y="618">TRACE</text>
+    <text x="600" y="618">VERIFY</text>
+    <text x="920" y="618">ACK</text>
+  </g>
+</svg>

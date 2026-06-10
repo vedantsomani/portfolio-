@@ -1,0 +1,363 @@
+---
+import { ArrowUpRight } from "lucide-react";
+
+type System = {
+  id: string;
+  size: "large" | "small";
+  title: string;
+  hook: string;
+  status: string;
+  chips: string[];
+  action: string;
+  href: string;
+  accent: string;
+  secondary?: string;
+};
+
+const systems: System[] = [
+  {
+    id: "drone",
+    size: "large",
+    title: "Drone Mission",
+    hook: "Pixhawk-based F450 platform for GPS-denied autonomy and sensor-integration experiments.",
+    status: "Active Testing",
+    chips: ["Flight logs", "Sensor setup", "Mission Planner"],
+    action: "Replay Mission",
+    href: "#drone",
+    accent: "#f59e0b",
+  },
+  {
+    id: "vajra",
+    size: "large",
+    title: "VAJRA Secure Link",
+    hook: "Rust-based post-quantum secure communication prototype under verification.",
+    status: "Prototype",
+    chips: ["Code", "Handshake design", "Audit roadmap"],
+    action: "Inspect Protocol",
+    href: "#vajra",
+    accent: "#8b5cf6",
+    secondary: "#38bdf8",
+  },
+  {
+    id: "esp32",
+    size: "small",
+    title: "ESP32 Live Node",
+    hook: "Embedded telemetry node exposing live/cached sensor readings through an API.",
+    status: "Live / Cached",
+    chips: ["Firmware", "Sensor data", "API"],
+    action: "Open Node",
+    href: "#esp32",
+    accent: "#22c55e",
+  },
+  {
+    id: "fabrication",
+    size: "small",
+    title: "Fabrication Bench",
+    hook: "3D printed robotics parts, aircraft parts, failed prints, and material experiments.",
+    status: "Iterating",
+    chips: ["CAD", "Print photos", "Failed prints"],
+    action: "View Bench",
+    href: "#fabrication",
+    accent: "#f97316",
+  },
+  {
+    id: "failure",
+    size: "small",
+    title: "Failure Wall",
+    hook: "What broke, why it broke, how it was debugged, and what changed.",
+    status: "Public Debug Log",
+    chips: ["Root cause", "Fixes", "Lessons"],
+    action: "Read Failures",
+    href: "#failures",
+    accent: "#facc15",
+  },
+];
+---
+
+<section id="work" class="systems-band" data-reveal>
+  <div class="container-wide systems-shell">
+    <header class="systems-head">
+      <p class="micro-label" style="color: #60a5fa">Work</p>
+      <h2>Featured Engineering Systems</h2>
+    </header>
+
+    <div class="bento">
+      {systems.map((system) => (
+        <a
+          class={`bento-card bento-${system.size} bento-${system.id}`}
+          href={system.href}
+          style={`--accent: ${system.accent}; --secondary: ${system.secondary ?? system.accent}`}
+        >
+          <span class="bento-visual" aria-hidden="true">
+            {system.id === "drone" && (
+              <svg viewBox="0 0 400 130">
+                <line x1="16" y1="112" x2="384" y2="112" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 7" opacity="0.4" />
+                <path d="M 24 104 C 70 48 130 28 196 36 C 256 43 280 76 320 68 C 352 62 368 40 384 34" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+                <g transform="translate(196 36)" stroke="var(--accent)" stroke-width="1.8">
+                  <line x1="-11" y1="-11" x2="11" y2="11" />
+                  <line x1="-11" y1="11" x2="11" y2="-11" />
+                  <circle cx="-11" cy="-11" r="4.5" fill="none" />
+                  <circle cx="11" cy="-11" r="4.5" fill="none" />
+                  <circle cx="-11" cy="11" r="4.5" fill="none" />
+                  <circle cx="11" cy="11" r="4.5" fill="none" />
+                </g>
+                <circle cx="24" cy="104" r="3.5" fill="var(--accent)" />
+                <circle cx="320" cy="68" r="3" fill="var(--accent)" opacity="0.7" />
+                <circle cx="384" cy="34" r="3.5" fill="var(--accent)" />
+              </svg>
+            )}
+            {system.id === "vajra" && (
+              <svg viewBox="0 0 400 130">
+                <rect x="28" y="36" width="92" height="58" rx="6" fill="none" stroke="var(--accent)" stroke-width="1.6" />
+                <rect x="280" y="36" width="92" height="58" rx="6" fill="none" stroke="var(--secondary)" stroke-width="1.6" />
+                <text x="74" y="70" text-anchor="middle" fill="var(--accent)" font-size="12" font-weight="600" font-family="var(--font-mono)">A</text>
+                <text x="326" y="70" text-anchor="middle" fill="var(--secondary)" font-size="12" font-weight="600" font-family="var(--font-mono)">B</text>
+                <line x1="124" y1="54" x2="276" y2="54" stroke="var(--accent)" stroke-width="1.4" opacity="0.7" />
+                <line x1="124" y1="76" x2="276" y2="76" stroke="var(--secondary)" stroke-width="1.4" opacity="0.7" />
+                <polygon points="276,54 267,49.5 267,58.5" fill="var(--accent)" />
+                <polygon points="124,76 133,71.5 133,80.5" fill="var(--secondary)" />
+                <rect x="166" y="102" width="68" height="16" rx="8" fill="none" stroke="var(--secondary)" stroke-width="1.2" opacity="0.8" />
+                <circle cx="200" cy="110" r="2.5" fill="var(--secondary)" />
+              </svg>
+            )}
+            {system.id === "esp32" && (
+              <svg viewBox="0 0 400 110">
+                <polyline points="20,84 80,76 140,80 200,52 260,60 320,40 380,46" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.85" />
+                {[20, 80, 140, 200, 260, 320].map((x, i) => (
+                  <line x1={x} y1="98" x2={x} y2={92 - (i % 3) * 6} stroke="var(--accent)" stroke-width="3" opacity="0.3" />
+                ))}
+                <circle class="pulse-dot" cx="380" cy="46" r="5" fill="var(--accent)" />
+              </svg>
+            )}
+            {system.id === "fabrication" && (
+              <svg viewBox="0 0 400 110">
+                {[92, 80, 68, 56, 44, 32, 20].map((y, i) => (
+                  <line x1={70 + i * 16} y1={y} x2={330 - i * 16} y2={y} stroke="var(--accent)" stroke-width="3" opacity={0.22 + i * 0.1} />
+                ))}
+                <line x1="40" y1="100" x2="360" y2="100" stroke="var(--accent)" stroke-width="1.4" opacity="0.5" />
+              </svg>
+            )}
+            {system.id === "failure" && (
+              <svg viewBox="0 0 400 110">
+                <rect x="120" y="58" width="200" height="38" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity="0.35" />
+                <rect x="108" y="40" width="200" height="38" rx="5" fill="none" stroke="var(--accent)" stroke-width="1.4" opacity="0.6" />
+                <rect x="96" y="22" width="200" height="38" rx="5" fill="rgba(5,6,8,0.85)" stroke="var(--accent)" stroke-width="1.5" />
+                <line x1="108" y1="35" x2="160" y2="35" stroke="var(--accent)" stroke-width="3.5" />
+                <line x1="108" y1="46" x2="240" y2="46" stroke="var(--accent)" stroke-width="2" opacity="0.45" />
+              </svg>
+            )}
+          </span>
+
+          <span class="bento-meta">
+            <span class="bento-top">
+              <strong>{system.title}</strong>
+              <span class="bento-status">{system.status}</span>
+            </span>
+            <span class="bento-hook">{system.hook}</span>
+            <span class="bento-chips">
+              {system.chips.map((chip) => (
+                <span>{chip}</span>
+              ))}
+            </span>
+            <span class="bento-action">
+              {system.action}
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .systems-band {
+    border-top: 1px solid var(--hairline);
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .systems-shell {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .systems-head {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .systems-head h2 {
+    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+    line-height: 1.02;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .bento-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: var(--color-bg-1);
+    box-shadow: var(--shadow-card);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .bento-card:hover,
+  .bento-card:focus-visible {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--color-border));
+    box-shadow:
+      0 0 28px color-mix(in srgb, var(--accent) 12%, transparent),
+      var(--shadow-hover);
+  }
+
+  .bento-large {
+    grid-column: span 3;
+  }
+
+  .bento-small {
+    grid-column: span 2;
+  }
+
+  .bento-visual {
+    display: block;
+    border-bottom: 1px solid var(--hairline);
+    background:
+      linear-gradient(170deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent 55%),
+      rgba(5, 6, 8, 0.5);
+    padding: 1rem 1.1rem;
+  }
+
+  .bento-large .bento-visual {
+    min-height: 158px;
+  }
+
+  .bento-small .bento-visual {
+    min-height: 120px;
+  }
+
+  .bento-visual svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .pulse-dot {
+    animation: status-pulse 1.6s ease-in-out infinite;
+  }
+
+  .bento-meta {
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+  }
+
+  .bento-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .bento-top strong {
+    color: var(--color-text-strong);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .bento-status {
+    flex: 0 0 auto;
+    border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--color-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    color: color-mix(in srgb, var(--accent) 85%, white);
+    padding: 0.24rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .bento-hook {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .bento-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .bento-chips span {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(5, 6, 8, 0.5);
+    color: var(--color-text-soft);
+    padding: 0.22rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .bento-action {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+    color: color-mix(in srgb, var(--accent) 88%, white);
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: gap 0.16s ease;
+  }
+
+  .bento-card:hover .bento-action,
+  .bento-card:focus-visible .bento-action {
+    gap: 0.55rem;
+  }
+
+  @media (max-width: 1020px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bento-large,
+    .bento-small {
+      grid-column: span 1;
+    }
+
+    .bento-failure {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+
+    .bento-large,
+    .bento-small,
+    .bento-failure {
+      grid-column: auto;
+    }
+  }
+</style>
