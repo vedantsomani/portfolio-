@@ -1,0 +1,576 @@
+---
+// Terminal-style command palette (Ctrl+K / Cmd+K / "/") + the FAIL-000
+// easter egg dialog it can open. Vanilla script: this ships on every page,
+// so it must not pull React with it.
+---
+
+<div id="cmdk" class="cmdk" hidden>
+  <div class="cmdk-backdrop" data-cmdk-close></div>
+  <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmdk-input-row">
+      <span class="cmdk-prompt" aria-hidden="true">vedant@lab:~$</span>
+      <input
+        id="cmdk-input"
+        type="text"
+        placeholder="type a command — try `sudo`"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="cmdk-list"
+        aria-activedescendant=""
+      />
+      <kbd>esc</kbd>
+    </div>
+    <ul id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Commands"></ul>
+    <div class="cmdk-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> execute</span>
+      <span class="cmdk-foot-hint">// classified entries require sudo</span>
+    </div>
+  </div>
+</div>
+
+<dialog id="fail-zero" class="failzero">
+  <div class="fz-head">
+    <span class="fz-id mono-value">FAIL-000</span>
+    <strong>Tried to be a normal portfolio</strong>
+    <span class="fz-sev">critical</span>
+  </div>
+  <dl class="fz-body">
+    <div>
+      <dt>Symptom</dt>
+      <dd>Visitors scrolled, shrugged, and closed the tab. Nothing stuck.</dd>
+    </div>
+    <div>
+      <dt>Root cause</dt>
+      <dd>The operator hid behind generic panels. Zero risk taken, zero easter eggs shipped.</dd>
+    </div>
+    <div>
+      <dt>Fix</dt>
+      <dd>Rebuilt as a living lab: boot sequence, command palette, and a public failure log.</dd>
+    </div>
+    <div>
+      <dt>Lesson</dt>
+      <dd>
+        If you dug deep enough to find this, we should probably talk.
+        <a href="mailto:vedantsomani12@gmail.com?subject=Found%20FAIL-000">Report this finding →</a>
+      </dd>
+    </div>
+  </dl>
+  <form method="dialog" class="fz-foot">
+    <span class="mono-value">incident unlocked · konami / sudo</span>
+    <button class="fz-close" value="ack">acknowledge</button>
+  </form>
+</dialog>
+
+<script>
+  type Item = {
+    label: string;
+    hint: string;
+    group: string;
+    keywords: string;
+    secret?: boolean;
+    action: { kind: "link"; href: string; external?: boolean } | { kind: "copy"; text: string } | { kind: "dialog" };
+  };
+
+  const ITEMS: Item[] = [
+    { label: "01 · Drone Mission Replay", hint: "system", group: "systems", keywords: "drone pixhawk f450 flight mission replay", action: { kind: "link", href: "/#drone" } },
+    { label: "02 · VAJRA Secure Link", hint: "system", group: "systems", keywords: "vajra rust security protocol post-quantum handshake", action: { kind: "link", href: "/#vajra" } },
+    { label: "03 · ESP32 Live Node", hint: "system", group: "systems", keywords: "esp32 telemetry sensor embedded firmware node", action: { kind: "link", href: "/#esp32" } },
+    { label: "04 · Fabrication Bench", hint: "system", group: "systems", keywords: "3d print cad fabrication bambu pla", action: { kind: "link", href: "/#fabrication" } },
+    { label: "05 · Failure Log", hint: "system", group: "systems", keywords: "failures broke debug log wall", action: { kind: "link", href: "/#failures" } },
+    { label: "cat fail-003 · optical flow health", hint: "incident", group: "failures", keywords: "fail 003 optical flow optflow drone", action: { kind: "link", href: "/failures/fail-003-optical-flow-health" } },
+    { label: "cat fail-007 · vajra audit gap", hint: "incident", group: "failures", keywords: "fail 007 vajra audit security", action: { kind: "link", href: "/failures/fail-007-vajra-audit-gap" } },
+    { label: "cat fail-009 · filament sensor", hint: "incident", group: "failures", keywords: "fail 009 filament sensor print bambu", action: { kind: "link", href: "/failures/fail-009-filament-sensor" } },
+    { label: "Proof Archive", hint: "page", group: "pages", keywords: "proof evidence archive media", action: { kind: "link", href: "/proof" } },
+    { label: "Live Status Surface", hint: "page", group: "pages", keywords: "status live esp32 api json", action: { kind: "link", href: "/status" } },
+    { label: "Resume", hint: "page", group: "pages", keywords: "resume cv hire", action: { kind: "link", href: "/resume" } },
+    { label: "whoami · about the operator", hint: "page", group: "pages", keywords: "whoami about vedant somani operator bio", action: { kind: "link", href: "/about" } },
+    { label: "Email the operator", hint: "action", group: "actions", keywords: "email mail contact reach", action: { kind: "link", href: "mailto:vedantsomani12@gmail.com" } },
+    { label: "Copy email address", hint: "action", group: "actions", keywords: "copy email clipboard contact", action: { kind: "copy", text: "vedantsomani12@gmail.com" } },
+    { label: "Open GitHub", hint: "action", group: "actions", keywords: "github code repos git", action: { kind: "link", href: "https://github.com/vedantsomani", external: true } },
+    {
+      label: "sudo hire vedant",
+      hint: "authorized",
+      group: "classified",
+      keywords: "sudo hire vedant job offer recruit work",
+      secret: true,
+      action: { kind: "link", href: "mailto:vedantsomani12@gmail.com?subject=sudo%20hire%20vedant&body=Authorization%20granted.%20Let%27s%20talk." },
+    },
+    { label: "sudo cat fail-000", hint: "classified incident", group: "classified", keywords: "sudo fail 000 secret hidden classified easter egg konami", secret: true, action: { kind: "dialog" } },
+  ];
+
+  const GROUP_LABELS: Record<string, string> = {
+    systems: "SYSTEMS",
+    failures: "FAILURE LOG",
+    pages: "PAGES",
+    actions: "ACTIONS",
+    classified: "CLASSIFIED",
+  };
+
+  const root = document.getElementById("cmdk");
+  const input = document.getElementById("cmdk-input") as HTMLInputElement | null;
+  const list = document.getElementById("cmdk-list");
+  const failZero = document.getElementById("fail-zero") as HTMLDialogElement | null;
+
+  if (root && input && list) {
+    let visible: Item[] = [];
+    let cursor = 0;
+    let lastFocus: HTMLElement | null = null;
+
+    const isOpen = () => !root.hidden;
+
+    const open = () => {
+      lastFocus = document.activeElement as HTMLElement | null;
+      root.hidden = false;
+      document.body.style.overflow = "hidden";
+      input.value = "";
+      render("");
+      input.focus();
+    };
+
+    const close = () => {
+      root.hidden = true;
+      document.body.style.overflow = "";
+      lastFocus?.focus?.();
+    };
+
+    const unlockFailZero = () => {
+      close();
+      failZero?.showModal();
+    };
+
+    const run = (item: Item) => {
+      const action = item.action;
+      if (action.kind === "dialog") {
+        unlockFailZero();
+        return;
+      }
+      if (action.kind === "copy") {
+        navigator.clipboard?.writeText(action.text).then(() => {
+          const row = list.querySelector(`#cmdk-item-${visible.indexOf(item)} .cmdk-item-hint`);
+          if (row) row.textContent = "copied ✓";
+        });
+        return;
+      }
+      if (action.external) {
+        window.open(action.href, "_blank", "noopener");
+        close();
+        return;
+      }
+      close();
+      window.location.href = action.href;
+    };
+
+    const matches = (item: Item, query: string) => {
+      if (!query) return !item.secret;
+      const haystack = `${item.label} ${item.keywords}`.toLowerCase();
+      const allowSecret = query.includes("sudo") || query.includes("000") || query.includes("hire") || query.includes("classified");
+      if (item.secret && !allowSecret) return false;
+      return query.split(/\s+/).every((part) => haystack.includes(part));
+    };
+
+    const render = (query: string) => {
+      visible = ITEMS.filter((item) => matches(item, query.toLowerCase().trim()));
+      cursor = 0;
+      list.innerHTML = "";
+      let lastGroup = "";
+
+      visible.forEach((item, index) => {
+        if (item.group !== lastGroup) {
+          lastGroup = item.group;
+          const head = document.createElement("li");
+          head.className = "cmdk-group";
+          head.setAttribute("role", "presentation");
+          head.textContent = GROUP_LABELS[item.group] ?? item.group;
+          list.appendChild(head);
+        }
+        const row = document.createElement("li");
+        row.setAttribute("role", "presentation");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.id = `cmdk-item-${index}`;
+        button.className = "cmdk-item";
+        button.setAttribute("role", "option");
+        button.setAttribute("aria-selected", String(index === cursor));
+        button.innerHTML = `<span class="cmdk-item-label"></span><span class="cmdk-item-hint mono-value"></span>`;
+        (button.querySelector(".cmdk-item-label") as HTMLElement).textContent = item.label;
+        (button.querySelector(".cmdk-item-hint") as HTMLElement).textContent = item.hint;
+        button.addEventListener("click", () => run(item));
+        button.addEventListener("pointermove", () => setCursor(index));
+        row.appendChild(button);
+        list.appendChild(row);
+      });
+
+      if (visible.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "cmdk-empty";
+        empty.setAttribute("role", "presentation");
+        empty.textContent = query.trim().startsWith("sudo")
+          ? "permission check passed — but no such command."
+          : `command not found: ${query.trim()} — try \`sudo\``;
+        list.appendChild(empty);
+      }
+      syncCursor();
+    };
+
+    const setCursor = (index: number) => {
+      cursor = index;
+      syncCursor();
+    };
+
+    const syncCursor = () => {
+      list.querySelectorAll<HTMLButtonElement>(".cmdk-item").forEach((button, index) => {
+        button.setAttribute("aria-selected", String(index === cursor));
+        if (index === cursor) {
+          input.setAttribute("aria-activedescendant", button.id);
+          button.scrollIntoView({ block: "nearest" });
+        }
+      });
+    };
+
+    input.addEventListener("input", () => render(input.value));
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (visible.length) setCursor((cursor + 1) % visible.length);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (visible.length) setCursor((cursor - 1 + visible.length) % visible.length);
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        const item = visible[cursor];
+        if (item) run(item);
+      }
+    });
+
+    root.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("[data-cmdk-close]")) close();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if ((event.key === "k" || event.key === "K") && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        isOpen() ? close() : open();
+        return;
+      }
+      if (event.key === "Escape" && isOpen()) {
+        close();
+        return;
+      }
+      const target = event.target as HTMLElement;
+      const editing = target.closest("input, textarea, select, [contenteditable]");
+      if (event.key === "/" && !editing && !isOpen()) {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("[data-cmdk-open]")) open();
+    });
+
+    // Konami code → FAIL-000. The classic, because some traditions matter.
+    const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+    let progress = 0;
+    document.addEventListener("keydown", (event) => {
+      progress = event.key === KONAMI[progress] ? progress + 1 : event.key === KONAMI[0] ? 1 : 0;
+      if (progress === KONAMI.length) {
+        progress = 0;
+        unlockFailZero();
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  .cmdk {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    padding: clamp(4rem, 14vh, 9rem) 1rem 1rem;
+  }
+
+  .cmdk[hidden] {
+    display: none;
+  }
+
+  .cmdk-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 3, 5, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .cmdk-panel {
+    position: relative;
+    width: min(100%, 620px);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--color-proof) 36%, var(--color-border));
+    border-radius: var(--radius-card);
+    background: #07090d;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6), 0 0 42px rgba(96, 165, 250, 0.08);
+    animation: cmdk-in 0.16s ease;
+  }
+
+  @keyframes cmdk-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+    }
+  }
+
+  .cmdk-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-bottom: 1px solid var(--hairline);
+    padding: 0.85rem 1rem;
+  }
+
+  .cmdk-prompt {
+    color: var(--color-proof);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .cmdk-input-row input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-strong);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  .cmdk-input-row input::placeholder {
+    color: var(--color-text-soft);
+  }
+
+  .cmdk-list {
+    max-height: min(46vh, 380px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0.45rem;
+    list-style: none;
+  }
+
+  .cmdk-group {
+    padding: 0.6rem 0.65rem 0.3rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+
+  .cmdk-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: var(--color-text-muted);
+    padding: 0.6rem 0.65rem;
+    font-size: 0.92rem;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .cmdk-item[aria-selected="true"] {
+    border-color: color-mix(in srgb, var(--color-proof) 38%, var(--color-border));
+    background: color-mix(in srgb, var(--color-proof) 10%, transparent);
+    color: var(--color-text-strong);
+  }
+
+  .cmdk-item-hint {
+    flex: 0 0 auto;
+    color: var(--color-text-soft);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .cmdk-empty {
+    padding: 1rem 0.65rem 1.1rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .cmdk-foot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-top: 1px solid var(--hairline);
+    padding: 0.6rem 1rem;
+    color: var(--color-text-soft);
+    font-size: 0.72rem;
+  }
+
+  .cmdk-foot-hint {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  .cmdk kbd,
+  .cmdk-foot kbd {
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
+    background: var(--color-bg-1);
+    color: var(--color-text-soft);
+    padding: 0.12rem 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  /* FAIL-000 */
+  .failzero {
+    /* Tailwind preflight zeroes margins, which breaks native dialog centering. */
+    margin: auto;
+    width: min(100% - 2rem, 560px);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-left: 3px solid #ef4444;
+    border-radius: 0.6rem;
+    background: #0a0c11;
+    color: var(--color-text-muted);
+    padding: 0;
+    box-shadow: 0 24px 90px rgba(0, 0, 0, 0.7), 0 0 50px rgba(239, 68, 68, 0.1);
+  }
+
+  .failzero::backdrop {
+    background: rgba(2, 3, 5, 0.75);
+    backdrop-filter: blur(6px);
+  }
+
+  .fz-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px dashed rgba(239, 68, 68, 0.35);
+    padding: 1rem 1.1rem;
+  }
+
+  .fz-id {
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-radius: 0.35rem;
+    background: rgba(239, 68, 68, 0.08);
+    color: #f87171;
+    padding: 0.28rem 0.55rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+  }
+
+  .fz-head strong {
+    flex: 1;
+    color: var(--color-text-strong);
+    font-size: 1.02rem;
+    line-height: 1.3;
+  }
+
+  .fz-sev {
+    border: 1px solid #ef4444;
+    border-radius: 999px;
+    color: #f87171;
+    padding: 0.24rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    animation: status-pulse 1.4s ease-in-out infinite;
+  }
+
+  .fz-body {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 1.1rem;
+  }
+
+  .fz-body dt {
+    color: #f87171;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .fz-body dd {
+    margin: 0.3rem 0 0;
+    line-height: 1.6;
+  }
+
+  .fz-body a {
+    color: var(--color-text-strong);
+    text-decoration: underline dotted;
+    text-underline-offset: 0.22em;
+  }
+
+  .fz-body a:hover {
+    color: #f87171;
+  }
+
+  .fz-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    border-top: 1px solid var(--hairline);
+    padding: 0.85rem 1.1rem;
+  }
+
+  .fz-foot .mono-value {
+    color: var(--color-text-soft);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .fz-close {
+    min-height: 2.5rem;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-radius: 0.45rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-text-strong);
+    padding: 0.5rem 1rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.16s ease;
+  }
+
+  .fz-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+  }
+
+  @media (max-width: 640px) {
+    .cmdk {
+      padding-top: 3.5rem;
+    }
+
+    .cmdk-prompt {
+      display: none;
+    }
+
+    .cmdk-foot-hint {
+      display: none;
+    }
+  }
+</style>

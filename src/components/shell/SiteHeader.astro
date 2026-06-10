@@ -3,6 +3,7 @@ const navItems = [
   { href: "/#work", label: "Work" },
   { href: "/#failures", label: "Failures" },
   { href: "/#proof", label: "Proof" },
+  { href: "/about", label: "About" },
   { href: "/resume", label: "Resume" },
   { href: "/#contact", label: "Contact" },
 ];
@@ -18,9 +19,20 @@ const navItems = [
       </span>
     </a>
 
+    <div class="lab-tick" data-lab-clock aria-label="Lab status: online">
+      <span class="lab-tick-dot" aria-hidden="true"></span>
+      <span>LAB ONLINE</span>
+      <span class="lab-tick-time mono-value" data-clock>--:--</span>
+      <span>IST</span>
+    </div>
+
     <nav class="header-nav" aria-label="Primary navigation">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
+
+    <button class="cmdk-open" type="button" data-cmdk-open aria-label="Open command palette (Ctrl+K)">
+      <kbd aria-hidden="true">⌘</kbd><kbd aria-hidden="true">K</kbd>
+    </button>
 
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
       <span class="menu-bar" aria-hidden="true"></span>
@@ -60,6 +72,22 @@ const navItems = [
         toggle.focus();
       }
     });
+  }
+
+  // Lab clock pinned to IST — the bench's timezone, not the visitor's.
+  const clock = document.querySelector<HTMLElement>("[data-clock]");
+  if (clock) {
+    const format = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const update = () => {
+      clock.textContent = format.format(new Date());
+    };
+    update();
+    setInterval(update, 10_000);
   }
 </script>
 
@@ -125,10 +153,69 @@ const navItems = [
     letter-spacing: 0.12em;
   }
 
+  .lab-tick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-left: 0.5rem;
+    margin-right: auto;
+    border: 1px solid color-mix(in srgb, var(--color-esp32) 30%, var(--color-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-esp32) 6%, transparent);
+    color: var(--color-text-soft);
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .lab-tick-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-esp32);
+    animation: status-pulse 1.6s ease-in-out infinite;
+  }
+
+  .lab-tick-time {
+    color: var(--color-text-strong);
+    font-size: 0.66rem;
+  }
+
   .header-nav {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+  }
+
+  .cmdk-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.45rem;
+    background: var(--color-bg-1);
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.16s ease;
+  }
+
+  .cmdk-open:hover {
+    border-color: color-mix(in srgb, var(--color-proof) 46%, var(--color-border));
+  }
+
+  .cmdk-open kbd {
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .cmdk-open:hover kbd {
+    color: var(--color-text-strong);
   }
 
   .header-nav a {
@@ -186,6 +273,12 @@ const navItems = [
 
   .mobile-nav {
     display: none;
+  }
+
+  @media (max-width: 1080px) {
+    .lab-tick {
+      display: none;
+    }
   }
 
   @media (max-width: 760px) {

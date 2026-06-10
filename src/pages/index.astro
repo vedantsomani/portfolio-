@@ -42,24 +42,33 @@ const failureTickets: FailureTicket[] = failures.map((failure) => ({
     title: "VEDANT LAB - Vedant Somani",
     description:
       "Engineering portfolio of Vedant Somani: drones, ESP32 telemetry, Rust security prototypes, 3D printed hardware, and the failures behind them.",
-    image: "/visuals/proof-archive.svg",
+    image: "/og/default.png",
   }}
 >
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero" id="hero">
+    <div class="hero-track mono-value" data-hero-track aria-hidden="true">X:0000 · Y:0000 · TRK</div>
     <div class="container hero-content">
-      <p class="micro-label hero-kicker">Engineering Log · Est. 2026</p>
-      <h1>VEDANT LAB</h1>
-      <p class="hero-tagline">Robotics. Embedded Systems. Secure Communication.</p>
-      <p class="hero-sub">
+      <div class="hero-boot" aria-hidden="true">
+        <span class="boot-line" data-boot-line>&gt; boot vedant.lab --verbose</span>
+        <span class="boot-line" data-boot-line>&gt; systems: 5 online · failures: 3 public · proof: indexed</span>
+        <span class="boot-line" data-boot-line>&gt; operator: VEDANT SOMANI · status: OPEN TO WORK</span>
+        <span class="boot-caret" data-boot-caret></span>
+      </div>
+      <h1 data-scramble>VEDANT LAB</h1>
+      <p class="hero-tagline hero-stagger" style="--stagger: 1">Robotics. Embedded Systems. Secure Communication.</p>
+      <p class="hero-sub hero-stagger" style="--stagger: 2">
         I build and document real systems: drones, ESP32 telemetry, Rust security prototypes,
         3D printed hardware, and the failures behind them.
       </p>
-      <div class="hero-actions">
+      <div class="hero-actions hero-stagger" style="--stagger: 3">
         <a class="button button-primary" href="#work">View Work</a>
         <a class="button" href="#proof">View Proof</a>
-        <a class="button" href="/resume">Download Resume</a>
+        <a class="button" href="/resume">Resume</a>
       </div>
+      <p class="hero-cmdhint hero-stagger" style="--stagger: 4">
+        <kbd>Ctrl</kbd><kbd>K</kbd> open the lab console — or try the Konami code.
+      </p>
     </div>
   </section>
 
@@ -227,6 +236,61 @@ const failureTickets: FailureTicket[] = failures.map((failure) => ({
   <AboutContact />
 </MainLayout>
 
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Boot sequence: type the log lines, then leave the caret idling.
+  const bootLines = Array.from(document.querySelectorAll<HTMLElement>("[data-boot-line]"));
+  const caret = document.querySelector<HTMLElement>("[data-boot-caret]");
+  if (!reduce && bootLines.length > 0) {
+    const texts = bootLines.map((line) => line.textContent ?? "");
+    for (const line of bootLines) line.textContent = "";
+
+    let lineIndex = 0;
+    const typeLine = () => {
+      if (lineIndex >= bootLines.length) {
+        caret?.classList.add("is-idle");
+        return;
+      }
+      const el = bootLines[lineIndex];
+      const text = texts[lineIndex];
+      let chars = 0;
+      const step = () => {
+        chars += 1;
+        el.textContent = text.slice(0, chars);
+        if (chars < text.length) {
+          setTimeout(step, 8 + Math.random() * 14);
+        } else {
+          lineIndex += 1;
+          setTimeout(typeLine, 130);
+        }
+      };
+      step();
+    };
+    typeLine();
+  }
+
+  // Crosshair telemetry: coordinates readout follows the pointer over the hero.
+  const hero = document.getElementById("hero");
+  const track = document.querySelector<HTMLElement>("[data-hero-track]");
+  if (hero && track && !reduce && window.matchMedia("(pointer: fine)").matches) {
+    let frame = 0;
+    hero.addEventListener("pointermove", (event) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = hero.getBoundingClientRect();
+        const x = String(Math.max(0, Math.round(event.clientX - rect.left))).padStart(4, "0");
+        const y = String(Math.max(0, Math.round(event.clientY - rect.top))).padStart(4, "0");
+        track.style.transform = `translate(${event.clientX + 16}px, ${event.clientY + 20}px)`;
+        track.textContent = `X:${x} · Y:${y} · TRK`;
+        track.classList.add("is-live");
+      });
+    });
+    hero.addEventListener("pointerleave", () => track.classList.remove("is-live"));
+  }
+</script>
+
 <style>
   /* HERO */
   .hero {
@@ -255,8 +319,113 @@ const failureTickets: FailureTicket[] = failures.map((failure) => ({
     padding-block: clamp(6rem, 14vw, 11rem) clamp(5rem, 11vw, 9rem);
   }
 
-  .hero-kicker {
+  .hero-boot {
+    display: grid;
+    gap: 0.2rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: clamp(0.68rem, 1.4vw, 0.8rem);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .boot-line {
+    min-height: 1.5em;
+    white-space: pre-wrap;
+  }
+
+  .boot-line:last-of-type {
     color: var(--color-proof);
+  }
+
+  .boot-caret {
+    width: 0.55em;
+    height: 1.05em;
+    background: var(--color-proof);
+    animation: caret-blink 1.05s steps(2) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero-cmdhint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    color: var(--color-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-cmdhint kbd {
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
+    background: var(--color-bg-1);
+    color: var(--color-text-muted);
+    padding: 0.14rem 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  @media (pointer: coarse) {
+    .hero-cmdhint {
+      display: none;
+    }
+  }
+
+  /* Staggered entrance, JS-gated so no-JS visitors see everything instantly. */
+  :global(html.js) .hero-stagger {
+    opacity: 0;
+    translate: 0 10px;
+    animation: hero-rise 0.5s ease forwards;
+    animation-delay: calc(0.3s + var(--stagger) * 0.14s);
+  }
+
+  @keyframes hero-rise {
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .hero-stagger {
+      animation: none;
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    .boot-caret {
+      animation: none;
+    }
+  }
+
+  .hero-track {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0;
+    border: 1px solid color-mix(in srgb, var(--color-proof) 35%, var(--color-border));
+    border-radius: 0.3rem;
+    background: rgba(5, 6, 8, 0.85);
+    color: var(--color-proof);
+    padding: 0.22rem 0.5rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: opacity 0.18s ease;
+    will-change: transform;
+  }
+
+  .hero-track.is-live {
+    opacity: 1;
   }
 
   .hero-content h1 {

@@ -1,4 +1,5 @@
 ---
+import CommandPalette from "@components/shell/CommandPalette.astro";
 import SiteFooter from "@components/shell/SiteFooter.astro";
 import SiteHeader from "@components/shell/SiteHeader.astro";
 import { defaultMeta, pageTitle, type PageMeta } from "@lib/seo";
@@ -16,7 +17,7 @@ interface Props {
 const { meta = defaultMeta, accent = "#60a5fa" } = Astro.props;
 const resolvedTitle = meta.title === defaultMeta.title ? meta.title : pageTitle(meta.title);
 const description = meta.description ?? defaultMeta.description;
-const image = meta.image ?? defaultMeta.image ?? "/visuals/proof-archive.svg";
+const image = meta.image ?? defaultMeta.image ?? "/og/default.png";
 const site = Astro.site ?? Astro.url;
 const canonical = meta.canonical ?? new URL(Astro.url.pathname, site).toString();
 const ogImage = new URL(image, site).toString();
@@ -31,6 +32,7 @@ const ogImage = new URL(image, site).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#050608" />
     <meta property="og:title" content={resolvedTitle} />
@@ -39,6 +41,7 @@ const ogImage = new URL(image, site).toString();
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <script is:inline>document.documentElement.classList.add("js");</script>
   </head>
   <body>
@@ -50,6 +53,7 @@ const ogImage = new URL(image, site).toString();
       </main>
       <SiteFooter />
     </div>
+    <CommandPalette />
     <script>
       const targets = document.querySelectorAll("[data-reveal]");
       if (targets.length > 0) {
@@ -65,6 +69,45 @@ const ogImage = new URL(image, site).toString();
           { rootMargin: "0px 0px -8% 0px" },
         );
         for (const target of targets) observer.observe(target);
+      }
+
+      // Decrypt effect: [data-scramble] text resolves left-to-right from
+      // glyph noise when it scrolls into view. Layout-stable (same length).
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const scrambleTargets = document.querySelectorAll<HTMLElement>("[data-scramble]");
+      if (!reduceMotion && scrambleTargets.length > 0) {
+        const NOISE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&<>[]/";
+        const decode = (el: HTMLElement) => {
+          const original = el.textContent ?? "";
+          if (!original.trim()) return;
+          const duration = Math.min(900, 360 + original.length * 18);
+          const start = performance.now();
+          const tick = (now: number) => {
+            const progress = Math.min(1, (now - start) / duration);
+            const settled = Math.floor(progress * original.length);
+            let output = original.slice(0, settled);
+            for (let i = settled; i < original.length; i++) {
+              const char = original[i];
+              output += /[a-zA-Z0-9]/.test(char) ? NOISE[Math.floor(Math.random() * NOISE.length)] : char;
+            }
+            el.textContent = output;
+            if (progress < 1) requestAnimationFrame(tick);
+            else el.textContent = original;
+          };
+          requestAnimationFrame(tick);
+        };
+        const scrambleObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                decode(entry.target as HTMLElement);
+                scrambleObserver.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.4 },
+        );
+        for (const target of scrambleTargets) scrambleObserver.observe(target);
       }
     </script>
   </body>
